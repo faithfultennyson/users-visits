@@ -20,7 +20,6 @@
     /* Typography */
     --font-body: 'Inter', system-ui, sans-serif;
     --font-heading: var(--font-body);
-    --font-scale: 1.0;
     --handle-size: 20px;
     --logo-size: 64px;
 
