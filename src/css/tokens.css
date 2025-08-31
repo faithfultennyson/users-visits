@@ -20,7 +20,6 @@
     /* Typography */
     --font-body: 'Inter', system-ui, sans-serif;
     --font-heading: var(--font-body);
-    --font-scale: 1.0;
     --handle-size: 20px;
     --logo-size: 64px;
 
@@ -46,7 +45,7 @@
     --footer-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1);
 
     /* Cards */
-    --card-bg: rgba(255, 255, 255, 0.1);
+    --card-bg: #1e1e1e;
     --card-hover-lift: translateY(-2px);
     --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
