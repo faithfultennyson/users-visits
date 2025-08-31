@@ -9,20 +9,21 @@ const form = document.getElementById('reportForm');
 function showMenu(card, button) {
     if (isCardReported(card.dataset.uid)) return;
 
-    const rect = button.getBoundingClientRect();
-    menu.style.top = `${rect.bottom + window.scrollY + 8}px`;
-    menu.style.left = `${rect.left + window.scrollX}px`;
-    menu.classList.add('visible');
     activeCard = card;
-    
-    // Close menu when clicking outside
+    card.appendChild(menu);
+    menu.classList.add('visible');
+    menu.style.top = `${button.offsetTop + button.offsetHeight + 8}px`;
+    menu.style.right = '0.5rem';
+    menu.style.left = '0.5rem';
+
+    // Close menu when clicking outside the card
     const closeMenu = (e) => {
-        if (!menu.contains(e.target) && !button.contains(e.target)) {
+        if (!card.contains(e.target)) {
             menu.classList.remove('visible');
             document.removeEventListener('click', closeMenu);
         }
     };
-    
+
     document.addEventListener('click', closeMenu);
 }
 
@@ -90,7 +91,7 @@ export function initializeReports() {
 
     // Close modal on backdrop click or escape
     modal.addEventListener('click', e => {
-        if (e.target === modal) {
+        if (e.target === modal || e.target.classList.contains('btn-cancel')) {
             modal.classList.remove('visible');
         }
     });
