@@ -5,22 +5,19 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: clamp(8px, 1.2vw, 16px);
+}
+
 /* Grid Layout */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--gap);
     max-width: var(--grid-max);
     width: 100%;
     margin: 0 auto;
     padding: 1rem;
-}
-
-/* Force 3 cards per row on tablets/mobiles */
-@media (max-width: 1023px) {
-    .grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
 /* Force 4 cards per row on desktops */
@@ -39,13 +36,13 @@
 }
 
 .description h1 {
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 5vw, 2rem);
     margin-bottom: 1rem;
     font-weight: 800;
 }
 
 .description p {
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
     opacity: 0.9;
     max-width: 600px;
     margin: 0 auto;
@@ -86,7 +83,6 @@
 
 body {
     font-family: var(--font-body);
-    font-size: calc(16px * var(--font-scale));
     line-height: 1.5;
     color: var(--text);
     background: var(--creator-bg);
@@ -158,7 +154,7 @@ body[data-gradient="true"] {
     border: none;
     color: var(--text);
     cursor: pointer;
-    font-size: 24px;
+    font-size: clamp(1.5rem, 5vw, 2rem);
 }
 
 #hamburgerMenu {
@@ -171,17 +167,33 @@ body[data-gradient="true"] {
     border-radius: var(--creator-card-radius);
     max-height: clamp(60vh, 80vh, 80vh);
     width: min(300px, 85vw);
-    overflow-y: auto;
+    display: none;
     margin: 1rem;
-    padding: 1rem 0;
+    padding: 0;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-    display: none;
-    margin: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    flex-direction: column;
+}
+
+#hamburgerMenu .close-menu {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+}
+
+#hamburgerMenu .menu-links {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 1rem 0;
+    flex: 1;
 }
 
 /* Card and Title Styles */
@@ -197,7 +209,7 @@ body[data-gradient="true"] {
 
 .title {
     margin: 0;
-    font-size: calc(1rem * var(--font-scale));
+    font-size: clamp(0.8rem, 2vw, 1rem);
     font-weight: var(--title-font-weight);
     color: var(--text);
     display: -webkit-box;
@@ -261,7 +273,7 @@ body[data-gradient="true"] {
     
 
 #hamburgerMenu.visible {
-    display: block;
+    display: flex;
 }
 
 #hamburgerMenu a {
@@ -422,7 +434,7 @@ body[data-gradient="true"] {
 
 .title {
     flex: 1;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
