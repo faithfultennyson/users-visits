@@ -1,0 +1,64 @@
+:root {
+    /* Brand Colors */
+    --cg-teal: #26C6DA;
+    --cg-blue: #4361EE;
+    --cg-indigo: #3A0CA3;
+    --cg-ink: #121212;
+    
+    /* Responsive spacing */
+    --gap: clamp(1rem, 2vw, 2rem);
+
+    /* Theme Tokens */
+    --creator-bg: var(--cg-ink);
+    --creator-gradient: linear-gradient(135deg, var(--cg-teal), var(--cg-blue));
+    --creator-card-radius: 18px;
+    
+    /* Grid & Layout */
+    --grid-max: 1440px;
+    --gap: 2rem;
+
+    /* Typography */
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-heading: var(--font-body);
+    --font-scale: 1.0;
+    --handle-size: 20px;
+    --logo-size: 64px;
+
+    /* Layout */
+    --header-bg: rgba(255, 255, 255, 0.1);
+    --header-blur: 15px;
+    --header-bd: rgba(255, 255, 255, 0.1);
+    --header-radius: var(--creator-card-radius);
+    --header-gap: 1rem;
+
+    /* Grid */
+    --grid-max: 1440px;
+    --gap: 1.5rem;
+    
+    /* Footer */
+    --footer-bg: rgba(0, 0, 0, 0.2);
+    --footer-blur: var(--header-blur);
+    --footer-bd: var(--header-bd);
+    --footer-icon-size: 20px;
+    --footer-gap: 1rem;
+    --footer-padding-y: 2rem;
+    --footer-link-color: rgba(255, 255, 255, 0.8);
+    --footer-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1);
+
+    /* Cards */
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --card-hover-lift: translateY(-2px);
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    --rim: rgba(255, 255, 255, 0.5);
+    
+    /* UI Elements */
+    --modal-bg: var(--creator-bg);
+    --modal-bd: rgba(255, 255, 255, 0.1);
+    --menu-bg: rgba(30, 30, 30, 0.95);
+    --menu-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Text Colors */
+    --text: rgba(255, 255, 255, 0.9);
+    --text-muted: rgba(255, 255, 255, 0.6);
+}
