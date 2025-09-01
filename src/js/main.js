@@ -5,6 +5,7 @@ import { initializeAnalytics } from './analytics.js';
 import { getPublicProfile, getPublicCards } from './api.js';
 import { setCards, setProfile } from './state.js';
 import { initializeHeader } from './ui-header.js';
+import { initializeScroll } from './ui-scroll.js';
 
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', async () => {
@@ -39,6 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Initialize grid with cards
         console.log('Initializing grid...');
         initializeGrid(cards);
+
+        // Initialize scroll functionality
+        console.log('Initializing scroll features...');
+        initializeScroll();
 
         // Initialize analytics last
         console.log('Initializing analytics...');

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/description.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <script type="module" src="js/index.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="branding">
+                <img id="logo" src="" alt="">
+                <span id="handle"></span>
+            </div>
+            <div class="nav-container">
+                <nav class="quick-links"></nav>
+                <button id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="hamburgerMenu">☰</button>
+            </div>
+        </div>
+        <div id="hamburgerMenu" class="overflow-menu" aria-hidden="true">
+            <button class="close-menu" aria-label="Close menu">✕</button>
+            <nav class="overflow-links"></nav>
+        </div>
+    </header>
+
+    <div class="description" data-sticky="false">
+        <h1></h1>
+        <p></p>
+        <a href="/signup" class="marketing-link" style="display: none;"></a>
+    </div>
+
+    <main class="content">
+        <!-- Cards will be dynamically inserted here -->
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <!-- Social media icons will be dynamically inserted here -->
+        </div>
+        <div class="footer-legal">
+            <!-- Legal links will be dynamically inserted here -->
+        </div>
+        <div class="copyright">
+            <!-- Copyright/disclaimer text will be dynamically inserted here -->
+        </div>
+    </footer>
+</body>
+</html>

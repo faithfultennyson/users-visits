@@ -2,29 +2,62 @@ import { isCardReported, markCardReported } from './state.js';
 import { trackReportOpen, trackReportSubmit } from './analytics.js';
 
 let activeCard = null;
+let activeMenu = null;
+let activeButton = null;
 const modal = document.getElementById('modal');
 const menu = document.getElementById('menu');
 const form = document.getElementById('reportForm');
 
 function showMenu(card, button) {
-    if (isCardReported(card.dataset.uid)) return;
+    // If clicking the same button, toggle the menu
+    if (activeButton === button) {
+        hideMenu();
+        return;
+    }
 
+    // Hide any previously open menu
+    hideMenu();
+
+    // Show new menu
     activeCard = card;
-    card.appendChild(menu);
+    activeMenu = menu;
+    activeButton = button;
+
+    // Position menu below button
+    const rect = button.getBoundingClientRect();
+    const menuWidth = menu.offsetWidth || 150; // Default width if not yet rendered
+    
+    // Calculate position to keep menu within viewport
+    let left = rect.left + window.scrollX - menuWidth + rect.width;
+    let top = rect.bottom + window.scrollY + 5;
+
+    // Adjust if menu would go off screen
+    if (left < 0) left = 0;
+    if (left + menuWidth > window.innerWidth) {
+        left = window.innerWidth - menuWidth - 5;
+    }
+
+    // Apply position
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
+    
+    // Show menu and update accessibility
     menu.classList.add('visible');
-    menu.style.top = `${button.offsetTop + button.offsetHeight + 8}px`;
-    menu.style.right = '0.5rem';
-    menu.style.left = '0.5rem';
+    menu.setAttribute('aria-hidden', 'false');
+    button.setAttribute('aria-expanded', 'true');
+}
 
-    // Close menu when clicking outside the card
-    const closeMenu = (e) => {
-        if (!card.contains(e.target)) {
-            menu.classList.remove('visible');
-            document.removeEventListener('click', closeMenu);
+// Close menu function
+function hideMenu() {
+    if (activeMenu) {
+        activeMenu.classList.remove('visible');
+        activeMenu.setAttribute('aria-hidden', 'true');
+        if (activeButton) {
+            activeButton.setAttribute('aria-expanded', 'false');
         }
-    };
-
-    document.addEventListener('click', closeMenu);
+        activeMenu = null;
+        activeButton = null;
+    }
 }
 
 function showModal(reason) {
@@ -72,6 +105,8 @@ export function initializeReports() {
     menu.addEventListener('click', e => {
         const button = e.target.closest('button');
         if (button) {
+            e.stopPropagation();  // Stop click from reaching the card
+            e.preventDefault();   // Prevent default button behavior
             const reason = button.dataset.reason;
             showModal(reason);
         }
@@ -81,11 +116,18 @@ export function initializeReports() {
     modal.addEventListener('submit', e => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const uid = formData.get('uid');
-        const reason = formData.get('type');
+        const reportData = {
+            uid: formData.get('uid'),
+            type: formData.get('type'),
+            message: formData.get('message'),
+            contact: {
+                name: formData.get('name') || null,
+                email: formData.get('email') || null
+            }
+        };
         
-        markCardReported(uid);
-        trackReportSubmit(uid, reason);
+        markCardReported(reportData.uid);
+        trackReportSubmit(reportData.uid, reportData);
         showSuccess();
     });
 
