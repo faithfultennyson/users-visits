@@ -1,4 +1,3 @@
-
 CreatorGrid.app — Static Visitor + Full System Instruction Document
 Part 1 — Cards & Reporting
 ________________________________________
@@ -341,10 +340,10 @@ Icons
 ________________________________________
 6. Styling & Theming System
 Base colors (4 brand tokens)
-•	--cg-teal: #26C6DA
-•	--cg-blue: #4361EE
-•	--cg-indigo: #3A0CA3
-•	--cg-ink: #121212
+•	--brand-primary: #26C6DA
+•	--brand-secondary: #4361EE
+•	--brand-tertiary: #3A0CA3
+•	--brand-text: #121212
 •	These are the core palette. Creators tweak them to derive unique looks.
 Background modes
 •	Solid mode: --use-gradient: 0 → background from --creator-bg.
@@ -972,3 +971,159 @@ Use these in order and cycle when you run out. All sized to 742×960 crop.
 
 
 
+
+# CreatorGrid Analytics & Reporting Implementation Guide
+
+## 1. Core Analytics System
+
+### Beacon System (`beacon.js`)
+- Handles core analytics functionality
+- Manages session & anonymous IDs
+- Stores reported cards in localStorage
+```javascript
+const STORAGE_KEYS = {
+    ANON_ID: 'cg_aid',    // Anonymous user ID
+    SESSION_ID: 'cg_sid',  // Session ID
+    LAST_ACTIVE: 'cg_last' // Last activity timestamp
+};
+```
+
+### Analytics Tracking (`analytics.js`)
+- Implements throttling (10 events/10s)
+- Creates unified event payloads
+- Tracks:
+  - Page views
+  - Card impressions
+  - Card clicks
+  - Report actions
+  - Navigation events
+
+## 2. Reporting System
+
+### Report Flow
+1. User clicks "..." on card (`ui-cards.js`)
+2. Report modal opens (`reports.js`)
+3. User fills form
+4. Submit triggers analytics event
+5. Card marked as reported in localStorage
+
+### Components Involved:
+```javascript
+// reports.js - Handles form submission
+modal.addEventListener('submit', e => {
+    const reportData = {
+        uid: formData.get('uid'),
+        report_type: formData.get('type'),
+        details: formData.get('details'),
+        contact: {
+            name: formData.get('name'),
+            email: formData.get('email')
+        }
+    };
+});
+```
+
+## 3. Navigation Tracking
+
+### Header Links (ui-header.js)
+- Tracks header navigation clicks
+- Handles hamburger menu interactions
+- Source marked as "header"
+
+### Footer Links (ui-header.js)
+```javascript
+footer?.addEventListener('click', e => {
+    const link = e.target.closest('a');
+    if (link) {
+        trackHeaderLinkClick(link.href, 'footer');
+    }
+});
+```
+
+## 4. Card Interaction Tracking
+
+### Card System (`ui-cards.js`)
+- Tracks impressions using IntersectionObserver
+- Monitors card clicks
+- Handles report button clicks
+
+## 5. Data Flow
+
+### Event Creation Flow:
+1. User action occurs
+2. Component calls analytics function
+3. Beacon creates unified payload
+4. Event queued & throttled
+5. Console output for debugging
+
+### Example Payload:
+```javascript
+{
+    event: "card_click",
+    aid: "anonymous-id",
+    sid: "session-id",
+    ts: timestamp,
+    url: currentURL,
+    ref: referrer,
+    meta: {
+        // event specific data
+    }
+}
+```
+
+## 6. File Dependencies
+
+```mermaid
+graph TD
+    A[main.js] --> B[beacon.js]
+    A --> C[analytics.js]
+    C --> B
+    D[ui-cards.js] --> C
+    E[ui-header.js] --> C
+    F[reports.js] --> C
+    F --> B
+```
+
+## 7. Storage Management
+
+### LocalStorage Keys:
+- `cg_aid`: Anonymous ID
+- `cg_sid`: Session ID
+- `cg_last`: Last active timestamp
+- `cg_reported`: Reported cards
+
+### SessionStorage:
+- Handles temporary session data
+- Cleared on browser close
+
+## 8. Event Throttling
+
+### Rules:
+- Max 10 events per 10 seconds
+- Queue-based system
+- Drops events when throttled
+- Console warnings for dropped events
+
+## 9. Integration Points
+
+### Component Integration:
+- `main.js`: Initializes systems
+- `ui-cards.js`: Card interactions
+- ui-header.js: Navigation events
+- `reports.js`: Report handling
+- `analytics.js`: Event processing
+- `beacon.js`: Core functionality
+
+This implementation provides:
+- Unified analytics tracking
+- Throttled event processing
+- Session management
+- Report system with optional contact
+- Navigation tracking
+- Card interaction monitoring
+
+All while maintaining:
+- User privacy (no cookies)
+- Performance (throttling)
+- Data consistency
+- Error handling
