@@ -1,5 +1,4 @@
 import { getReportedCards } from './beacon.js';
-import { fetchProfileConfig, fetchLinksConfig, isValidUrl } from './api.js';
 
 // State management
 let state = {
@@ -8,53 +7,8 @@ let state = {
     currentFilter: 'ig', // Default to Instagram
     currentPage: 0,
     reportedCards: getReportedCards(), // Initialize from localStorage
-    profile: null,
-    links: null
+    profile: null
 };
-
-// Initialize configs
-export async function initializeConfig() {
-    try {
-        const [profile, links] = await Promise.all([
-            fetchProfileConfig(),
-            fetchLinksConfig()
-        ]);
-
-        // Validate header links
-        if (links?.header) {
-            if (links.header.quick) {
-                links.header.quick = links.header.quick.filter(link => isValidUrl(link.href));
-            }
-            if (links.header.overflow) {
-                links.header.overflow = links.header.overflow.filter(link => isValidUrl(link.href));
-            }
-        }
-
-        // Validate footer links
-        if (links?.footer) {
-            if (links.footer.icons) {
-                links.footer.icons = links.footer.icons.filter(link => isValidUrl(link.href));
-            }
-            if (links.footer.text_links) {
-                links.footer.text_links = links.footer.text_links.filter(link => 
-                    link.fixed || (isValidUrl(link.href) && link.show)
-                );
-            }
-        }
-        
-        state.profile = profile;
-        state.links = links;
-
-        return { profile, links };
-    } catch (error) {
-        console.error('Failed to initialize config:', error);
-        return { profile: null, links: null };
-    }
-}
-
-// Config getters
-export const getProfileConfig = () => state.profile;
-export const getLinksConfig = () => state.links;
 
 // Debug state changes
 function logStateChange(action, data) {

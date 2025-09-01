@@ -1,25 +1,17 @@
 :root {
-    /* Brand Colors - will be overridden by profile.json */
+    /* Brand Colors */
     --brand-primary: #26C6DA;
     --brand-secondary: #4361EE;
     --brand-tertiary: #3A0CA3;
     --brand-text: #121212;
     
-    /* Theme Base */
+    /* Responsive spacing */
+    --gap: clamp(1rem, 2vw, 2rem);
+
+    /* Theme Tokens */
     --creator-bg: var(--brand-text);
     --creator-gradient: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-    --text: var(--header-text);
-    --text-muted: var(--desc-body-text);
-    --accent: var(--brand-primary);
     --creator-card-radius: 18px;
-    
-    /* Text Colors */
-    --header-text: #FFFFFF;
-    --desc-title-text: #FFFFFF;
-    --desc-body-text: #D0D0D0;
-    --card-title-text: #FFFFFF;
-    --card-desc-text: #D0D0D0;
-    --footer-text: #CCCCCC;
     
     /* Grid & Layout */
     --grid-max: 1440px;
@@ -30,8 +22,6 @@
     --font-heading: var(--font-body);
     --handle-size: 20px;
     --logo-size: 64px;
-    --hdr-h: 64px;
-    --ftr-h: 80px;
 
     /* Layout */
     --header-bg: rgba(255, 255, 255, 0.1);

@@ -20,7 +20,7 @@
     "icons": [
       { "icon": "social-whatsapp_icon",  "href": "https://wa.me/...",          "aria": "WhatsApp" },
       { "icon": "social-instagram_icon", "href": "https://instagram.com/...",  "aria": "Instagram" },
-      { "icon": "social-behance_icon",    "href": "https://tiktok.com/@...",    "aria": "TikTok" },
+      { "icon": "social-tiktok_icon",    "href": "https://tiktok.com/@...",    "aria": "TikTok" },
       { "icon": "social-youtube_icon",   "href": "https://youtube.com/...",    "aria": "YouTube" },
       { "icon": "social-linkedin_icon",  "href": "https://linkedin.com/...",   "aria": "LinkedIn" }
     ],
