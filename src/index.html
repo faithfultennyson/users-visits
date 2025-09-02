@@ -13,27 +13,23 @@
     <script type="module" src="js/index.js"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="branding">
-                <img id="logo" src="" alt="">
-                <span id="handle"></span>
-            </div>
-            <div class="nav-container">
-                <nav class="quick-links"></nav>
-                <button id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="hamburgerMenu">☰</button>
-            </div>
+    <header class="header h1">
+        <div class="header-left">
+            <img id="logo" src="" alt="">
+            <span id="handle"></span>
         </div>
-        <div id="hamburgerMenu" class="overflow-menu" aria-hidden="true">
+        <nav class="header-links"></nav>
+        <button id="hamburger" aria-controls="hamburgerMenu" aria-expanded="false" aria-label="Menu">☰</button>
+        <div id="hamburgerMenu" role="menu" aria-hidden="true">
             <button class="close-menu" aria-label="Close menu">✕</button>
-            <nav class="overflow-links"></nav>
+            <div class="menu-links"></div>
         </div>
     </header>
 
-    <div class="description" data-sticky="false">
+    <div class="description style-1 align-center" data-sticky="false">
         <h1></h1>
         <p></p>
-        <a href="/signup" class="marketing-link" style="display: none;"></a>
+        <a href="/signup" class="create-link" style="display: none;"><em></em></a>
     </div>
 
     <main class="content">
