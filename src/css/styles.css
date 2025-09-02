@@ -37,7 +37,7 @@ html {
     color: inherit;
     border-radius: var(--creator-card-radius);
     overflow: hidden;
-    background: #1e1e1e;
+    background: var(--card-bg);
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
@@ -48,14 +48,14 @@ html {
     flex-direction: column;
     border-radius: var(--creator-card-radius);
     overflow: hidden;
-    background: #1e1e1e;
+    background: var(--card-bg);
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     position: relative;
     pointer-events: none;
 }
 
 .skeleton-card .thumb-wrap {
-    background: linear-gradient(90deg, #1e1e1e 25%, #2a2a2a 50%, #1e1e1e 75%);
+    background: linear-gradient(90deg, var(--card-bg) 25%, #2a2a2a 50%, var(--card-bg) 75%);
     background-size: 800px 100%;
     animation: shimmer 1.5s linear infinite;
 }
@@ -67,7 +67,7 @@ html {
 .skeleton-card .title {
     height: 1em;
     margin-top: 0.5em;
-    background: linear-gradient(90deg, #1e1e1e 25%, #2a2a2a 50%, #1e1e1e 75%);
+    background: linear-gradient(90deg, var(--card-bg) 25%, #2a2a2a 50%, var(--card-bg) 75%);
     background-size: 800px 100%;
     animation: shimmer 1.5s linear infinite;
     border-radius: 4px;
@@ -75,7 +75,7 @@ html {
 
 .card-footer {
     padding: 12px;
-    background: #1e1e1e;
+    background: var(--card-bg);
 }
 
 .card:hover {
@@ -504,7 +504,7 @@ body[data-gradient="true"] {
     }
 }
 
-.footer {
+ .footer {
     margin-top: auto;
     padding: var(--footer-padding-y) max(1rem, calc((100% - var(--grid-max)) / 2));
     background: var(--footer-bg);
@@ -520,7 +520,12 @@ body[data-gradient="true"] {
     transform: translateY(100%);
     opacity: 0;
     transition: transform 0.8s ease, opacity 0.8s ease;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5rem, calc(var(--footer-padding-y) / 2), 2rem);
+ }
 
 .footer.sticky {
     position: fixed; /* Keep it fixed */
@@ -532,7 +537,6 @@ body[data-gradient="true"] {
     display: flex;
     justify-content: center;
     gap: var(--footer-gap);
-    margin-bottom: 1rem;
 }
 
 .footer-links img {
@@ -549,7 +553,6 @@ body[data-gradient="true"] {
     display: flex;
     justify-content: center;
     gap: 2rem;
-    margin-bottom: 1rem;
     font-size: var(--footer-font-size, 0.95rem);
     font-weight: var(--footer-font-weight, 500);
 }

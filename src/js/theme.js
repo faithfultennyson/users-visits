@@ -19,14 +19,21 @@ export function applyTheme(profile) {
     root.style.setProperty('--accent', profile.colors.accent);
     root.style.setProperty('--text', profile.colors.header_text);
     root.style.setProperty('--text-muted', profile.colors.desc_body_text);
+    root.style.setProperty('--card-bg', profile.colors.card_bg);
 
-    // Glass surfaces
-    const hGlass = profile.surfaces.header.glass;
-    root.style.setProperty('--header-bg', `rgba(255,255,255,${hGlass.opacity})`);
-    root.style.setProperty('--header-blur', `${hGlass.blur_px}px`);
-    const fGlass = profile.surfaces.footer.glass;
-    root.style.setProperty('--footer-bg', `rgba(0,0,0,${fGlass.opacity})`);
-    root.style.setProperty('--footer-blur', `${fGlass.blur_px}px`);
+    // Surfaces
+    applySurface(document.body, profile.surfaces.background, {
+        gradient: profile.colors.gradient,
+        solid: profile.colors.page_bg
+    });
+    applySurface(document.querySelector('.header'), profile.surfaces.header, {
+        gradient: profile.colors.gradient,
+        solid: profile.colors.page_bg
+    }, '--header-bg', '--header-blur');
+    applySurface(document.querySelector('.footer'), profile.surfaces.footer, {
+        gradient: profile.colors.gradient,
+        solid: profile.colors.page_bg
+    }, '--footer-bg', '--footer-blur');
 
     // Sizes
     root.style.setProperty('--hdr-h', profile.sizes.header_height_px + 'px');
@@ -59,6 +66,7 @@ export function applyTheme(profile) {
         desc.dataset.sticky = profile.description.sticky ? 'true' : 'false';
         desc.classList.toggle('align-center', profile.layout.description_align === 'center');
         desc.classList.toggle('align-left', profile.layout.description_align === 'left');
+        desc.style.textAlign = profile.layout.description_align;
         if (profile.surfaces.desc_band.mode === 'gradient') {
             desc.style.background = profile.colors.desc_band_bg;
         } else if (profile.surfaces.desc_band.mode === 'image') {
@@ -82,6 +90,7 @@ export function applyTheme(profile) {
             title.style.display = '-webkit-box';
             title.style.webkitLineClamp = profile.clamp.tiny_desc_lines;
             title.style.webkitBoxOrient = 'vertical';
+            title.style.textAlign = profile.layout.description_align;
         }
         if (body) {
             body.textContent = profile.description.body || '';
@@ -91,6 +100,7 @@ export function applyTheme(profile) {
             body.style.display = '-webkit-box';
             body.style.webkitLineClamp = profile.clamp.desc_body_lines;
             body.style.webkitBoxOrient = 'vertical';
+            body.style.textAlign = profile.layout.description_align;
         }
         if (link && em) {
             if (profile.description.marketing_link?.show) {
@@ -106,11 +116,11 @@ export function applyTheme(profile) {
     const quick = document.querySelector('.header-links');
     if (quick) {
         const alignMap = {
-            left: 'flex-start',
+            left: 'start',
             center: 'center',
-            right: 'flex-end'
+            right: 'end'
         };
-        quick.style.justifyContent = alignMap[profile.layout.header_quick_alignment] || 'flex-end';
+        quick.style.justifySelf = alignMap[profile.layout.header_quick_alignment] || 'end';
     }
 
     // Footer color
@@ -118,10 +128,49 @@ export function applyTheme(profile) {
     if (footer) {
         footer.style.color = profile.colors.footer_text;
     }
+}
 
-    // Body gradient toggle
-    if (profile.colors.gradient) {
-        document.body.dataset.gradient = 'true';
+function applySurface(element, surface, colors, bgVar, blurVar) {
+    if (!element || !surface) return;
+    const root = document.documentElement;
+    const { mode, image, glass } = surface;
+
+    if (element === document.body) {
+        element.style.background = '';
+        element.style.backgroundImage = '';
+        delete element.dataset.gradient;
+        if (mode === 'gradient') {
+            element.dataset.gradient = 'true';
+        } else if (mode === 'image' && image?.url) {
+            element.style.backgroundImage = `url(${image.url})`;
+            element.style.backgroundSize = image.fit || 'cover';
+            element.style.backgroundPosition = image.pos || 'center';
+            element.style.backgroundRepeat = 'no-repeat';
+        } else {
+            element.style.background = colors.solid;
+        }
+        return;
+    }
+
+    element.style.backgroundImage = '';
+    if (mode === 'glass' && glass && bgVar && blurVar) {
+        root.style.setProperty(bgVar, `rgba(255,255,255,${glass.opacity})`);
+        root.style.setProperty(blurVar, `${glass.blur_px}px`);
+    } else if (mode === 'image' && image?.url) {
+        element.style.backgroundImage = `url(${image.url})`;
+        element.style.backgroundSize = image.fit || 'cover';
+        element.style.backgroundPosition = image.pos || 'center';
+        element.style.backgroundRepeat = 'no-repeat';
+        if (bgVar) root.style.setProperty(bgVar, 'transparent');
+    } else if (mode === 'gradient') {
+        if (bgVar) root.style.setProperty(bgVar, colors.gradient);
+    } else {
+        if (bgVar) root.style.setProperty(bgVar, colors.solid);
+    }
+
+    if (glass && mode !== 'glass' && bgVar && blurVar) {
+        root.style.setProperty(blurVar, `${glass.blur_px}px`);
+        root.style.setProperty(bgVar, `rgba(255,255,255,${glass.opacity})`);
     }
 }
 
@@ -131,3 +180,6 @@ async function loadFonts() {
     fontLink.rel = 'stylesheet';
     document.head.appendChild(fontLink);
 }
+
+
+

@@ -40,6 +40,13 @@ export function initializeHeader() {
     getLinksConfig().then(config => {
         setLinksConfig(config);
         const base = config.icons.base_path;
+        // Set profile logo from profile-image config
+        const logoEl = document.getElementById('logo');
+        const profileImg = config['profile-image'];
+        if (logoEl && profileImg?.base_path) {
+            const name = profileImg.logo || 'logo';
+            logoEl.src = `${profileImg.base_path}${name}.png`;
+        }
         if (quickNav) {
             quickNav.innerHTML = '';
             config.header.quick.slice(0, 3).forEach(link => {

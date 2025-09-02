@@ -31,6 +31,7 @@
     --header-bd: rgba(255, 255, 255, 0.1);
     --header-radius: var(--creator-card-radius);
     --header-gap: 1rem;
+    --description-margin: 2rem auto;
 
     /* Grid */
     --grid-max: 1440px;

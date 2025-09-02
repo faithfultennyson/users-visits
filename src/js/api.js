@@ -217,7 +217,8 @@ export async function getLinksConfig() {
     if (!res.ok) throw new Error('Failed to load links');
     const data = await res.json();
     const isValid = href => typeof href === 'string' && href.length <= 2048 && (
-        href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:')
+        href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('/')
+
     );
     const filter = arr => Array.isArray(arr) ? arr.filter(l => isValid(l.href)) : [];
     if (data.header) {

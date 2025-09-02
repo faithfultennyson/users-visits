@@ -16,9 +16,9 @@
     max-width: var(--grid-max, 1440px);
     height: 100%;
     margin: 0 auto;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: space-between;
     gap: var(--spacing-md);
 }
 
@@ -41,16 +41,11 @@
 }
 
 /* Quick Links */
-.nav-container {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-}
-
 .header-links {
     display: flex;
     align-items: center;
     gap: var(--spacing-lg);
+    justify-self: end;
 }
 
 .header-links a {
