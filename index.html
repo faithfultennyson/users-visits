@@ -9,47 +9,32 @@
 </head>
 <body>
     <header class="header h1">
-        <div class="header-left">
-            <img id="logo" src="assets/logo.png" alt="Creator Logo" />
-            <span id="handle">@creator</span>
+        <div class="header-content">
+            <div class="branding">
+                <img id="logo" src="" alt="">
+                <span id="handle"></span>
+            </div>
+            <nav class="header-links"></nav>
+            <button id="hamburger" aria-controls="hamburgerMenu" aria-expanded="false" aria-label="Menu">☰</button>
         </div>
-        <nav class="header-links">
-            <a href="#" aria-label="Instagram"><img src="assets/socials/social-instagram_icon.svg" alt="" aria-hidden="true"></a>
-            <a href="#" aria-label="TikTok"><img src="assets/socials/social-tiktok_icon.svg" alt="" aria-hidden="true"></a>
-            <a href="#" aria-label="YouTube"><img src="assets/socials/social-youtube_icon.svg" alt="" aria-hidden="true"></a>
-        </nav>
-        <button id="hamburger" aria-controls="hamburgerMenu" aria-expanded="false" aria-label="Menu">☰</button>
         <div id="hamburgerMenu" role="menu" aria-hidden="true">
             <button class="close-menu" aria-label="Close menu">✕</button>
-            <div class="menu-links">
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-x_icon.svg" alt="X"> X</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-linkedin_icon.svg" alt="LinkedIn"> LinkedIn</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-whatsapp_icon.svg" alt="WhatsApp"> WhatsApp</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-pinterest_icon.svg" alt="Pinterest"> Pinterest</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-discord_icon.svg" alt="Discord"> Discord</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-google_icon.svg" alt="Google"> Google</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-behance_icon.svg" alt="Behance"> Behance</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-shazam_icon.svg" alt="Shazam"> Shazam</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-snapchat_icon.svg" alt="Snapchat"> Snapchat</a>
-                <a href="#" target="_blank" rel="noopener"><img src="assets/socials/social-itunes_icon.svg" alt="iTunes"> iTunes</a>
-            </div>
+            <div class="menu-links"></div>
         </div>
     </header>
 
-    <div class="description style-1 align-center">
-        <h1>Welcome to My Creative Space</h1>
-        <p>Explore my latest content from Instagram and TikTok. Feel free to browse through my curated collection of posts and connect with me on various social platforms.</p>
-        <a href="https://creativespase.com" class="create-link" target="_blank" rel="noopener">
-        <em>Create your own creative space</em>
-    </a>
+    <div class="description style-1 align-center" data-sticky="false">
+        <h1></h1>
+        <p></p>
+        <a href="/signup" class="create-link" style="display: none;"><em></em></a>
     </div>
 
     <div class="filters" role="tablist" aria-label="Source filter">
         <button class="pill active" role="tab" aria-pressed="true" data-filter="ig">
-            <img src="assets/socials/social-instagram_icon.svg" class="icon" alt="" aria-hidden="true"> Instagram
+            <img src="/assets/icons/social-instagram_icon.svg" class="icon" alt="" aria-hidden="true"> Instagram
         </button>
         <button class="pill" role="tab" aria-pressed="false" data-filter="tt">
-            <img src="assets/socials/social-tiktok_icon.svg" class="icon" alt="" aria-hidden="true"> TikTok
+            <img src="/assets/icons/social-tiktok_icon.svg" class="icon" alt="" aria-hidden="true"> TikTok
         </button>
     </div>
 
@@ -57,19 +42,10 @@
         <!-- Cards will be populated by JS -->
     </main>
 
-    <footer class="footer f1">
-        <div class="footer-links">
-            <a href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="assets/socials/social-whatsapp_icon.svg" alt=""></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/socials/social-instagram_icon.svg" alt=""></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><img src="assets/socials/social-tiktok_icon.svg" alt=""></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="YouTube"><img src="assets/socials/social-youtube_icon.svg" alt=""></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="assets/socials/social-linkedin_icon.svg" alt=""></a>
-        </div>
-        <div class="footer-legal">
-            <a href="#" target="_blank" rel="noopener">Privacy Policy</a>
-            <a href="#" target="_blank" rel="noopener">Create Account</a>
-        </div>
-        <em class="copyright">All logos are property of their respective owners.</em>
+    <footer class="footer">
+        <div class="footer-links"></div>
+        <div class="footer-legal"></div>
+        <div class="copyright"></div>
     </footer>
 
     <!-- Report Modal -->
@@ -99,8 +75,5 @@
 
     <button id="backToTop" aria-label="Back to top" class="back-to-top">↑</button>
     <script type="module" src="/src/js/main.js"></script>
-    
 </body>
 </html>
-
-
