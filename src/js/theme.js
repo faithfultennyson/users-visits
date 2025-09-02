@@ -124,4 +124,3 @@ async function loadFonts() {
     fontLink.rel = 'stylesheet';
     document.head.appendChild(fontLink);
 }
-
