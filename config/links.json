@@ -1,5 +1,6 @@
 {
   "icons": { "base_path": "/assets/icons/" },
+  "profile-image": { "base_path": "/assets/profile-image/", "logo": "logo" },
 
   "header": {
     "quick": [
