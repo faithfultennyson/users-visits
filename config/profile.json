@@ -18,6 +18,7 @@
     "desc_body_text": "#D0D0D0",
     "card_title_text": "#FFFFFF",
     "footer_text": "#CCCCCC",
+    "card_bg": "#1e1e1e",
 
     "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
   },

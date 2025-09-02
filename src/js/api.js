@@ -191,18 +191,6 @@ const mocktitles = [
 
 
 
-// Mock profile data
-const mockProfile = {
-    handle: '@creator',
-    links: {
-        instagram: 'https://instagram.com/creator',
-        tiktok: 'https://tiktok.com/@creator',
-        youtube: 'https://youtube.com/@creator',
-        whatsapp: 'https://wa.me/1234567890',
-        linkedin: 'https://linkedin.com/in/creator'
-    }
-};
-
 // Generate random mock cards
 function generateMockCards(count = 200000) {
     return Array.from({ length: count }, (_, i) => ({
@@ -218,9 +206,31 @@ function generateMockCards(count = 200000) {
 // Mock API calls
 export async function getPublicProfile() {
     console.log('Fetching public profile...');
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return mockProfile;
+    const res = await fetch('/config/profile.json');
+    if (!res.ok) throw new Error('Failed to load profile');
+    return res.json();
+}
+
+export async function getLinksConfig() {
+    console.log('Fetching links config...');
+    const res = await fetch('/config/links.json');
+    if (!res.ok) throw new Error('Failed to load links');
+    const data = await res.json();
+    const isValid = href => typeof href === 'string' && href.length <= 2048 && (
+        href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('/')
+    );
+    const filter = arr => Array.isArray(arr) ? arr.filter(l => isValid(l.href)) : [];
+    if (data.header) {
+        data.header.quick = filter(data.header.quick).slice(0, 3);
+        data.header.overflow = filter(data.header.overflow);
+    }
+    if (data.footer) {
+        data.footer.icons = filter(data.footer.icons);
+        if (Array.isArray(data.footer.text_links)) {
+            data.footer.text_links = data.footer.text_links.filter(l => isValid(l.href));
+        }
+    }
+    return data;
 }
 
 export async function getPublicCards() {
