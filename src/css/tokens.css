@@ -22,6 +22,8 @@
     --font-heading: var(--font-body);
     --handle-size: 20px;
     --logo-size: 64px;
+    --hdr-h: 64px;
+    --ftr-h: 80px;
 
     /* Layout */
     --header-bg: rgba(255, 255, 255, 0.1);

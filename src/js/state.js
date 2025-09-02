@@ -1,4 +1,5 @@
 import { getReportedCards } from './beacon.js';
+import { applyTheme } from './theme.js';
 
 // State management
 let state = {
@@ -7,7 +8,8 @@ let state = {
     currentFilter: 'ig', // Default to Instagram
     currentPage: 0,
     reportedCards: getReportedCards(), // Initialize from localStorage
-    profile: null
+    profile: null,
+    linksConfig: null
 };
 
 // Debug state changes
@@ -21,6 +23,7 @@ export const getPinnedCards = () => state.pinnedCards;
 export const getCurrentFilter = () => state.currentFilter;
 export const getCurrentPage = () => state.currentPage;
 export const getProfile = () => state.profile;
+export const getLinksConfig = () => state.linksConfig;
 export const isCardReported = (uid) => state.reportedCards.has(uid);
 
 // Setters
@@ -52,4 +55,12 @@ export const markCardReported = (uid) => {
 export const setProfile = (profile) => {
     logStateChange('setProfile', { handle: profile.handle });
     state.profile = profile;
+    applyTheme(profile);
 };
+
+export const setLinksConfig = (links) => {
+    logStateChange('setLinksConfig', {});
+    state.linksConfig = links;
+};
+
+export const APP_STATE = state;

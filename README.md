@@ -1,4 +1,9 @@
 CreatorGrid.app — Static Visitor + Full System Instruction Document
+
+This build now reads all public‑facing branding, layout, and links from
+`/config/profile.json` and `/config/links.json`.  Theme tokens, header and
+footer links, and marketing copy are injected at runtime so the visitor page
+matches the creator's configuration without manual edits.
 Part 1 — Cards & Reporting
 ________________________________________
 1. Card Design
