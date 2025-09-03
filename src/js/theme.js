@@ -9,6 +9,15 @@ export function applyTheme(profile) {
   if (!profile) return;
   const root = document.documentElement;
 
+  // --- Fonts ---------------------------------------------------------------
+  const bodyFamily = profile.fonts?.body?.family || 'Inter, system-ui, sans-serif';
+  const headingFamily = profile.fonts?.heading?.family || bodyFamily;
+
+  root.style.setProperty('--font-body', bodyFamily);
+  root.style.setProperty('--font-heading', headingFamily);
+  document.body.style.fontFamily = 'var(--font-body)';
+  loadFonts(profile.fonts);
+
   // --- Brand tokens ---------------------------------------------------------
   root.style.setProperty('--brand-primary', profile.brand.primary);
   root.style.setProperty('--brand-secondary', profile.brand.secondary);
@@ -65,6 +74,7 @@ export function applyTheme(profile) {
     handle.style.fontSize = profile.typography.header_rem + 'rem';
     handle.style.fontWeight = profile.typography.header_weight;
     handle.style.color = profile.colors.header_text;
+    handle.style.fontFamily = 'var(--font-heading)';
   }
 
   root.style.setProperty('--card-title-size', profile.typography.card_title_rem + 'rem');
@@ -158,6 +168,7 @@ export function applyTheme(profile) {
       title.style.fontSize   = profile.typography.desc_title_rem + 'rem';
       title.style.fontWeight = profile.typography.desc_title_weight;
       title.style.color      = profile.colors.desc_title_text;
+      title.style.fontFamily = 'var(--font-heading)';
       title.style.display = '-webkit-box';
       title.style.webkitLineClamp = profile.clamp.tiny_desc_lines;
       title.style.webkitBoxOrient = 'vertical';
@@ -360,9 +371,41 @@ export function applySurfaceVideos(profile) {
   }
 }
 
-async function loadFonts() {
-  const link = document.createElement('link');
-  link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
-  link.rel = 'stylesheet';
-  document.head.appendChild(link);
+let defaultFontLoaded = false;
+async function loadFonts(fonts) {
+  // Ensure default Inter is loaded to avoid flashes.
+  if (!defaultFontLoaded) {
+    const interHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
+    if (!document.head.querySelector(`link[href="${interHref}"]`)) {
+      const link = document.createElement('link');
+      link.href = interHref;
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
+    defaultFontLoaded = true;
+  }
+
+  if (!fonts) return;
+
+  const urls = [];
+  const bodyUrl = fonts.body?.url;
+  const headingUrl = fonts.heading?.url;
+  if (bodyUrl) urls.push(bodyUrl);
+  if (headingUrl && headingUrl !== bodyUrl) urls.push(headingUrl);
+
+  const existing = Array.from(document.head.querySelectorAll('link[data-profile-font]'));
+
+  for (const url of urls) {
+    if (!document.head.querySelector(`link[href="${url}"]`)) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      link.dataset.profileFont = 'true';
+      document.head.appendChild(link);
+    }
+  }
+
+  for (const link of existing) {
+    if (!urls.includes(link.href)) link.remove();
+  }
 }

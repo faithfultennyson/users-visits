@@ -1,12 +1,24 @@
 import { getLinksConfig } from './state.js';
 import { trackHeaderLinkClick } from './analytics.js';
 
+let stickyTimer;
+
+export function setFooterSticky(enable) {
+    clearTimeout(stickyTimer);
+    const footer = document.querySelector('.footer');
+    if (!footer) return;
+    stickyTimer = setTimeout(() => {
+        footer.classList.toggle('sticky', enable);
+    }, 5000);
+}
+
 function createFooterIcon(link, basePath) {
     const a = document.createElement('a');
     a.href = link.href;
     a.target = '_blank';
     a.rel = 'noopener';
     a.setAttribute('aria-label', link.aria);
+    a.title = link.aria;
 
     const img = document.createElement('img');
     img.src = `${basePath}${link.icon}.svg`;
@@ -73,8 +85,5 @@ export function initializeFooter() {
         copyright.textContent = linksConfig.footer.disclaimer;
     }
 
-    // Make footer sticky after delay
-    setTimeout(() => {
-        footer.classList.add('sticky');
-    }, 5000);
+    setFooterSticky(true);
 }

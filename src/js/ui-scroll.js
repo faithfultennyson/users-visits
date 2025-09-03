@@ -1,6 +1,5 @@
 export function initializeScroll() {
     const backToTopButton = document.getElementById('backToTop');
-    const footer = document.querySelector('.footer');
     
     function getTriggerHeight() {
         const isMobile = window.innerWidth <= 768;
@@ -36,9 +35,4 @@ export function initializeScroll() {
         handleScroll(); // Re-check scroll position
     });
     backToTopButton?.addEventListener('click', scrollToTop);
-
-    // Add sticky footer after 5 seconds with animation
-    setTimeout(() => {
-        footer?.classList.add('sticky');
-    }, 5000);
 }

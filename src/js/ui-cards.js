@@ -97,6 +97,21 @@ const placeholderSvg = `
   </g>
 </svg>`;
 
+const placeholderSvgElement = new DOMParser()
+  .parseFromString(placeholderSvg, 'image/svg+xml')
+  .documentElement;
+
+const allowedProtocols = new Set(['https:', 'mailto:', 'tel:']);
+
+function isSafeUrl(url) {
+  try {
+    const parsed = new URL(url, window.location.href);
+    return allowedProtocols.has(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
 /* ---------------- DOM builders ---------------- */
 
 function createCardElement(card) {
@@ -108,51 +123,74 @@ function createCardElement(card) {
 
   const cardEl = document.createElement('a');
   cardEl.className = 'card';
-  cardEl.href = targetUrl;
-  cardEl.target = '_blank';
-  cardEl.rel = 'noopener';
+  cardEl.setAttribute('target', '_blank');
+  cardEl.setAttribute('rel', 'noopener');
   cardEl.dataset.uid = uid;
   cardEl.dataset.source = source;
-  cardEl.setAttribute('data-source', card.source); // 'ig' or 'tt'
+  cardEl.setAttribute('data-source', source);
+  cardEl.setAttribute('href', isSafeUrl(targetUrl) ? targetUrl : '#');
 
+  const thumbWrap = document.createElement('div');
+  thumbWrap.className = 'thumb-wrap';
 
-  const reportedAttr = isCardReported(uid) ? 'disabled' : '';
+  const ph = document.createElement('div');
+  ph.className = 'ph';
+  ph.setAttribute('aria-hidden', 'true');
+  ph.appendChild(placeholderSvgElement.cloneNode(true));
 
-  cardEl.innerHTML = `
-    <div class="thumb-wrap">
-      <div class="ph" aria-hidden="true">${placeholderSvg}</div>
-      <img class="thumb" data-src="${imageUrl}" alt="" loading="lazy" onerror="this.style.display='none'">
-    </div>
+  const img = document.createElement('img');
+  img.className = 'thumb';
+  if (imageUrl) img.setAttribute('data-src', imageUrl);
+  img.setAttribute('alt', '');
+  img.setAttribute('loading', 'lazy');
+  img.addEventListener('error', () => {
+    img.style.display = 'none';
+  });
 
-    <button class="icon-btn dot-btn" type="button" aria-label="Report or more actions" ${reportedAttr}>
-      &#8943; <!-- ⋯ -->
-    </button>
+  thumbWrap.appendChild(ph);
+  thumbWrap.appendChild(img);
+  cardEl.appendChild(thumbWrap);
 
-    <div class="card-footer">
-      <h3 class="title" title="${title.replace(/"/g, '&quot;')}">${truncateTitle(title)}</h3>
-    </div>
+  const btn = document.createElement('button');
+  btn.className = 'icon-btn dot-btn';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Report or more actions');
+  if (isCardReported(uid)) btn.setAttribute('disabled', '');
+  btn.textContent = '⋯';
+  cardEl.appendChild(btn);
 
-    <div class="copy-feedback">Link copied!</div>
-  `;
+  const footer = document.createElement('div');
+  footer.className = 'card-footer';
 
-  // Card click analytics (ignore dot button)
+  const h3 = document.createElement('h3');
+  h3.className = 'title';
+  h3.setAttribute('title', title);
+  h3.textContent = truncateTitle(title);
+  footer.appendChild(h3);
+
+  cardEl.appendChild(footer);
+
+  const fbDiv = document.createElement('div');
+  fbDiv.className = 'copy-feedback';
+  fbDiv.textContent = 'Link copied!';
+  cardEl.appendChild(fbDiv);
+
   cardEl.addEventListener('click', (e) => {
     if (!e.target.closest('.dot-btn')) trackCardClick(uid);
   });
 
-  // Optional: long-press to copy URL
   let pressTimer;
   cardEl.addEventListener('mousedown', (e) => {
     if (e.target.closest('.dot-btn')) return;
     pressTimer = setTimeout(async () => {
       try {
         await navigator.clipboard.writeText(targetUrl);
-        const fb = cardEl.querySelector('.copy-feedback');
-        fb?.classList.add('visible');
-        setTimeout(() => fb?.classList.remove('visible'), 1500);
+        fbDiv.classList.add('visible');
+        setTimeout(() => fbDiv.classList.remove('visible'), 1500);
       } catch {}
     }, 500);
   });
+
   ['mouseup', 'mouseleave'].forEach(evt =>
     cardEl.addEventListener(evt, () => clearTimeout(pressTimer))
   );
@@ -165,12 +203,19 @@ function createCardElement(card) {
 function createSkeletonCard() {
     const div = document.createElement('div');
     div.className = 'skeleton-card';
-    div.innerHTML = `
-        <div class="thumb-wrap"></div>
-        <div class="card-footer">
-            <div class="title"></div>
-        </div>
-    `;
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb-wrap';
+    div.appendChild(thumb);
+
+    const footer = document.createElement('div');
+    footer.className = 'card-footer';
+
+    const title = document.createElement('div');
+    title.className = 'title';
+    footer.appendChild(title);
+
+    div.appendChild(footer);
     return div;
 }
 
@@ -241,7 +286,7 @@ function renderCards() {
 
     // Reset state
     currentIndex = 0;
-    grid.innerHTML = '';
+    grid.textContent = '';
 
     // Filter and sort cards by index
     const currentFilter = getCurrentFilter();

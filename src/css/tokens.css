@@ -10,16 +10,13 @@
       --boot-accent: var(--brand-primary);
     
     /* Responsive spacing */
-    --gap: clamp(1rem, 2vw, 2rem);
+    --gap: clamp(1.5rem, 2vw, 2rem);
 
     /* Theme Tokens */
     --creator-bg: var(--brand-text);
     --creator-gradient: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
     --creator-card-radius: 18px;
     
-    /* Grid & Layout */
-    --grid-max: 1440px;
-    --gap: 2rem;
 
       /* spacing tokens used by some variants */
     --spacing-sm: 0.5rem;
@@ -44,7 +41,6 @@
 
     /* Grid */
     --grid-max: 1440px;
-    --gap: 1.5rem;
     
     /* Footer */
     --footer-bg: rgba(0, 0, 0, 0.2);
