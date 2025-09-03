@@ -1,4 +1,4 @@
 {
-  "instagram": { "client_id": "ig123", "access_token": "tok" },
-  "tiktok":    { "client_key": "tt123", "access_token": "" }
+  "instagram": { "client_id": "ig123", "access_token": "" },
+  "tiktok":    { "client_key": "tt123", "access_token": "sd" }
 }
