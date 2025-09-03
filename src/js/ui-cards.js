@@ -113,6 +113,8 @@ function createCardElement(card) {
   cardEl.rel = 'noopener';
   cardEl.dataset.uid = uid;
   cardEl.dataset.source = source;
+  cardEl.setAttribute('data-source', card.source); // 'ig' or 'tt'
+
 
   const reportedAttr = isCardReported(uid) ? 'disabled' : '';
 

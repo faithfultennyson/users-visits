@@ -4,6 +4,10 @@
     --brand-secondary: #4361EE;
     --brand-tertiary: #3A0CA3;
     --brand-text: #121212;
+
+      --boot-bg: #0b0b0b;
+      --boot-fg: rgba(255,255,255,0.12);
+      --boot-accent: var(--brand-primary);
     
     /* Responsive spacing */
     --gap: clamp(1rem, 2vw, 2rem);
@@ -16,6 +20,11 @@
     /* Grid & Layout */
     --grid-max: 1440px;
     --gap: 2rem;
+
+      /* spacing tokens used by some variants */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
 
     /* Typography */
     --font-body: 'Inter', system-ui, sans-serif;
@@ -53,6 +62,11 @@
     --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     --rim: rgba(255, 255, 255, 0.5);
+
+    --card-bevel: 10px;      /* default chamfer size */
+    --card-shape: rounded;   /* rounded | blocky | bevel (for selector convenience) */
+    
+
     
     /* UI Elements */
     --modal-bg: var(--creator-bg);
@@ -63,4 +77,8 @@
     /* Text Colors */
     --text: rgba(255, 255, 255, 0.9);
     --text-muted: rgba(255, 255, 255, 0.6);
+
+    /* Description width */
+    --description-max-width: clamp(320px, 60ch, 720px); /* default for "short" */
+
 }
