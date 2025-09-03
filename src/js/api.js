@@ -1,3 +1,19 @@
+export async function getIntegrations() {
+  try {
+    const r = await fetch('/config/integrations.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('integrations fetch failed');
+    const j = await r.json();
+    const instagram = !!(j.instagram && j.instagram.client_id && j.instagram.access_token);
+    const tiktok    = !!(j.tiktok && j.tiktok.client_key && j.tiktok.access_token);
+    return { instagram, tiktok, raw: j };
+  } catch {
+    return { instagram: false, tiktok: false, raw: null };
+  }
+}
+
+
+
+
 // Mock CDN images
 const mockImages = [
     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=742&h=960&fit=crop",

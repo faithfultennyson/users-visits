@@ -11,7 +11,13 @@
     "overflow": [
       { "icon": "mail_icon",            "href": "mailto:hello@yoursite.com", "title": "Email",  "aria": "Email" },
       { "icon": "phone_icon",           "href": "tel:+2348000000000",        "title": "Call",   "aria": "Phone" },
-      { "icon": "social-discord_icon",  "href": "https://discord.gg/abc",    "title": "Discord","aria": "Discord" }
+      { "icon": "social-discord_icon",  "href": "https://discord.gg/abc",    "title": "Discord","aria": "Discord" },
+      { "icon": "social-linkedin_icon", "href": "https://linkedin.com/in/you", "title": "LinkedIn","aria": "LinkedIn" },
+      { "icon": "social-youtube_icon",  "href": "https://youtube.com/your",   "title": "YouTube","aria": "YouTube" },
+      { "icon": "social-x_icon",  "href": "https://twitter.com/your",   "title": "Twitter/X","aria": "Twitter" },
+      { "icon": "social-facebook_icon", "href": "https://facebook.com/your",   "title": "Facebook","aria": "Facebook" },
+      { "icon": "social-pinterest_icon","href": "https://pinterest.com/your",  "title": "Pinterest","aria": "Pinterest" },
+      { "icon": "social-github_icon",   "href": "https://github.com",           "title": "GitHub",  "aria": "GitHub" }
     ]
   },
 
@@ -33,4 +39,6 @@
 
     "disclaimer": "All logos are property of their respective owners."
   }
+
+  
 }
