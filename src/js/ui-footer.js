@@ -1,6 +1,17 @@
 import { getLinksConfig } from './state.js';
 import { trackHeaderLinkClick } from './analytics.js';
 
+let stickyTimer;
+
+export function setFooterSticky(enable) {
+    clearTimeout(stickyTimer);
+    const footer = document.querySelector('.footer');
+    if (!footer) return;
+    stickyTimer = setTimeout(() => {
+        footer.classList.toggle('sticky', enable);
+    }, 5000);
+}
+
 function createFooterIcon(link, basePath) {
     const a = document.createElement('a');
     a.href = link.href;
@@ -73,8 +84,5 @@ export function initializeFooter() {
         copyright.textContent = linksConfig.footer.disclaimer;
     }
 
-    // Make footer sticky after delay
-    setTimeout(() => {
-        footer.classList.add('sticky');
-    }, 5000);
+    setFooterSticky(true);
 }

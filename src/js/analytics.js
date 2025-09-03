@@ -1,7 +1,26 @@
 import { createPayload, initializeBeacon } from './beacon.js';
 
+const QUEUE_KEY = 'cg_queue';
+
+function loadQueue() {
+    try {
+        const stored = sessionStorage.getItem(QUEUE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveQueue() {
+    try {
+        sessionStorage.setItem(QUEUE_KEY, JSON.stringify(eventQueue));
+    } catch (e) {
+        // ignore storage errors
+    }
+}
+
 // Throttle implementation
-let eventQueue = [];
+let eventQueue = loadQueue();
 const MAX_EVENTS = 10;
 const WINDOW_SIZE = 10000; // 10 seconds
 const DWELL_INTERVAL = 5000; // Check dwell time every 5 seconds
@@ -15,6 +34,7 @@ function isThrottled() {
     const now = Date.now();
     // Remove events older than window size
     eventQueue = eventQueue.filter(ts => now - ts < WINDOW_SIZE);
+    saveQueue();
     return eventQueue.length >= MAX_EVENTS;
 }
 
@@ -22,6 +42,7 @@ function trackEvent(eventName, data = {}) {
     if (isThrottled()) return;
     
     eventQueue.push(Date.now());
+    saveQueue();
     const payload = createPayload(eventName, data);
     
     // Use sendBeacon if available, fall back to console.log
