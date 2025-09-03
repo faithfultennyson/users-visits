@@ -18,6 +18,7 @@ function createFooterIcon(link, basePath) {
     a.target = '_blank';
     a.rel = 'noopener';
     a.setAttribute('aria-label', link.aria);
+    a.title = link.aria;
 
     const img = document.createElement('img');
     img.src = `${basePath}${link.icon}.svg`;

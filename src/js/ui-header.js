@@ -12,6 +12,9 @@ function createLink(link, basePath, withTitle = false) {
         a.rel = 'noopener';
     }
     a.setAttribute('aria-label', link.aria);
+    if (!withTitle) {
+        a.title = link.aria;
+    }
 
     const img = document.createElement('img');
     img.src = `${basePath}${link.icon}.svg`;
