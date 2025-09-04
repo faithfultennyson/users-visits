@@ -10,13 +10,28 @@ export function applyTheme(profile) {
   const root = document.documentElement;
 
   // --- Fonts ---------------------------------------------------------------
-  const bodyFamily = profile.fonts?.body?.family || 'Inter, system-ui, sans-serif';
-  const headingFamily = profile.fonts?.heading?.family || bodyFamily;
+  const fonts = profile.typography?.fonts;
+  if (fonts?.primary_url && !document.head.querySelector(`link[href="${fonts.primary_url}"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = fonts.primary_url;
+    document.head.appendChild(link);
+  }
+
+  const bodyFamily =
+    fonts?.primary_name ||
+    profile.fonts?.body?.family ||
+    'Inter, system-ui, sans-serif';
+  const headingFamily =
+    fonts?.heading_name ||
+    profile.fonts?.heading?.family ||
+    'var(--font-body)';
 
   root.style.setProperty('--font-body', bodyFamily);
   root.style.setProperty('--font-heading', headingFamily);
   document.body.style.fontFamily = 'var(--font-body)';
-  loadFonts(profile.fonts);
+
+  if (!fonts) loadFonts(profile.fonts);
 
   // --- Brand tokens ---------------------------------------------------------
   root.style.setProperty('--brand-primary', profile.brand.primary);
