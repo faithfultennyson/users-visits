@@ -5,76 +5,69 @@
     --brand-tertiary: #3A0CA3;
     --brand-text: #121212;
 
-      --boot-bg: #0b0b0b;
-      --boot-fg: rgba(255,255,255,0.12);
-      --boot-accent: var(--brand-primary);
-    
-    /* Responsive spacing */
-    --gap: clamp(1.5rem, 2vw, 2rem);
-
-    /* Theme Tokens */
+    /* Creator */
     --creator-bg: var(--brand-text);
     --creator-gradient: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
     --creator-card-radius: 18px;
-    
-
-      /* spacing tokens used by some variants */
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-
-    /* Typography */
-    --font-body: 'Inter', system-ui, sans-serif;
-    --font-heading: var(--font-body);
-    --handle-size: 20px;
-    --logo-size: 64px;
-    --hdr-h: 64px;
-    --ftr-h: 80px;
 
     /* Layout */
+    --grid-max: 1440px;
+    --gap: clamp(1.5rem, 2vw, 2rem);
+
+    /* Typography */
+    --font-body: 'Inter, system-ui, sans-serif';
+    --font-heading: var(--font-body);
+
+    /* Header */
+    --hdr-h: 64px;
     --header-bg: rgba(255, 255, 255, 0.1);
     --header-blur: 15px;
     --header-bd: rgba(255, 255, 255, 0.1);
-    --header-radius: var(--creator-card-radius);
-    --header-gap: 1rem;
-    --description-margin: 2rem auto;
 
-    /* Grid */
-    --grid-max: 1440px;
-    
     /* Footer */
+    --ftr-h: 80px;
     --footer-bg: rgba(0, 0, 0, 0.2);
     --footer-blur: var(--header-blur);
     --footer-bd: var(--header-bd);
+    --footer-padding-y: 2rem;
     --footer-icon-size: 20px;
     --footer-gap: 1rem;
-    --footer-padding-y: 2rem;
     --footer-link-color: rgba(255, 255, 255, 0.8);
-    --footer-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1);
 
-    /* Cards */
+    /* Card */
     --card-bg: #1e1e1e;
-    --card-hover-lift: translateY(-2px);
-    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    --card-title-size: clamp(0.9rem, 2vw, 1.2rem);
+    --card-title-weight: 600;
+    --card-title-lines: 2;
+    --card-bevel: 10px;
     --rim: rgba(255, 255, 255, 0.5);
 
-    --card-bevel: 10px;      /* default chamfer size */
-    --card-shape: rounded;   /* rounded | blocky | bevel (for selector convenience) */
-    
+    /* Text */
+    --text: rgba(255, 255, 255, 0.9);
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --accent: var(--brand-primary);
 
-    
-    /* UI Elements */
+    /* Misc */
+    --logo-size: 64px;
     --modal-bg: var(--creator-bg);
     --modal-bd: rgba(255, 255, 255, 0.1);
     --menu-bg: rgba(30, 30, 30, 0.95);
     --menu-hover: rgba(255, 255, 255, 0.1);
-    
-    /* Text Colors */
-    --text: rgba(255, 255, 255, 0.9);
-    --text-muted: rgba(255, 255, 255, 0.6);
 
-    /* Description width */
-    --description-max-width: clamp(320px, 60ch, 720px); /* default for "short" */
-
+    /* Description sizing */
+    --description-max-width: clamp(320px, 60ch, 720px);
+    --description-margin: 2rem auto;
+    --description-content-max: 720px;
+    --description-p-max: 600px;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .back-to-top {
+    animation: none !important;
+  }
+}
+
