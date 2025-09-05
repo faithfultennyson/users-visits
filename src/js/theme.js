@@ -309,7 +309,8 @@ function ensureSurfaceVideo(host, src, className) {
       width: '100%',
       height: '100%',
       objectFit: 'cover',
-      zIndex: '0'
+      zIndex: '-1',
+      pointerEvents: 'none'
     });
     host.style.position = host.style.position || 'relative';
     host.prepend(v); // behind content
