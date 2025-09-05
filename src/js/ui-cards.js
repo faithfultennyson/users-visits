@@ -1,5 +1,6 @@
 import { getCards, getCurrentFilter, isCardReported, setCards, setFilter } from './state.js';
 import { trackCardClick, trackCardImpression } from './analytics.js';
+import { reduceMotion } from './a11y.js';
 
 // Constants for virtualization
 const INITIAL_RENDER = 48;  // First batch size
@@ -179,21 +180,23 @@ function createCardElement(card) {
     if (!e.target.closest('.dot-btn')) trackCardClick(uid);
   });
 
-  let pressTimer;
-  cardEl.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.dot-btn')) return;
-    pressTimer = setTimeout(async () => {
-      try {
-        await navigator.clipboard.writeText(targetUrl);
-        fbDiv.classList.add('visible');
-        setTimeout(() => fbDiv.classList.remove('visible'), 1500);
-      } catch {}
-    }, 500);
-  });
+  if (!reduceMotion) {
+    let pressTimer;
+    cardEl.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.dot-btn')) return;
+      pressTimer = setTimeout(async () => {
+        try {
+          await navigator.clipboard.writeText(targetUrl);
+          fbDiv.classList.add('visible');
+          setTimeout(() => fbDiv.classList.remove('visible'), 1500);
+        } catch {}
+      }, 500);
+    });
 
-  ['mouseup', 'mouseleave'].forEach(evt =>
-    cardEl.addEventListener(evt, () => clearTimeout(pressTimer))
-  );
+    ['mouseup', 'mouseleave'].forEach(evt =>
+      cardEl.addEventListener(evt, () => clearTimeout(pressTimer))
+    );
+  }
 
   return cardEl;
 }
