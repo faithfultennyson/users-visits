@@ -1,0 +1,14 @@
+{
+  "name": "creatorgrid",
+  "version": "1.0.0",
+  "description": "CreatorGrid project - security and accessibility fixes",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "faithfultennyson",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
