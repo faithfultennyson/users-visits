@@ -15,7 +15,7 @@
     --gap: clamp(1.5rem, 2vw, 2rem);
 
     /* Typography */
-    --font-body: 'Inter, system-ui, sans-serif';
+    --font-body: Inter, system-ui, sans-serif;
     --font-heading: var(--font-body);
 
     /* Header */
