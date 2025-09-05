@@ -9,8 +9,7 @@ import { getPublicProfile, getPublicCards } from './api.js';
 import { setCards, setProfile } from './state.js';
 import { initializeScroll } from './ui-scroll.js';
 import { renderSocialButtons } from './ui-social.js';
-
-const PRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+import { reduceMotion } from './a11y.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // ---- loader DOM + freeze scroll -----------------------------------------
@@ -135,7 +134,7 @@ function mountLoader() {
   fill.style.borderRadius = '999px';
   fill.style.background = 'var(--creator-gradient, linear-gradient(90deg,#26C6DA,#4361EE))';
   fill.style.transform = 'translateX(-60%)';
-  if (!PRM) fill.style.animation = 'loader-sweep 1.6s ease-in-out infinite';
+  if (!reduceMotion) fill.style.animation = 'loader-sweep 1.6s ease-in-out infinite';
   bar.appendChild(fill);
 
   // keyframes (inline so no CSS edit needed)

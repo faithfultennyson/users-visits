@@ -61,6 +61,14 @@
     --description-p-max: 600px;
 }
 
+body {
+    font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
@@ -68,6 +76,10 @@
   }
   .back-to-top {
     animation: none !important;
+  }
+  .card:hover {
+    transform: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
 }
 

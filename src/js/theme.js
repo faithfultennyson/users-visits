@@ -10,49 +10,13 @@ export function applyTheme(profile) {
   const root = document.documentElement;
 
   // --- Fonts ---------------------------------------------------------------
-  const fonts = profile.typography?.fonts;
-
+  const fonts = profile.fonts;
   if (fonts) {
-    const urls = [];
-    const bodyUrl = fonts.primary_url || fonts.body_url;
-    const headingUrl = fonts.heading_url;
-    if (bodyUrl) urls.push(bodyUrl);
-    if (headingUrl && headingUrl !== bodyUrl) urls.push(headingUrl);
-
-    const existing = Array.from(
-      document.head.querySelectorAll('link[data-profile-font]')
-    );
-
-    for (const url of urls) {
-      if (!document.head.querySelector(`link[href="${url}"]`)) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = url;
-        link.dataset.profileFont = 'true';
-        document.head.appendChild(link);
-      }
-    }
-
-    for (const link of existing) {
-      if (!urls.includes(link.href)) link.remove();
-    }
-
-    const bodyFamily =
-      fonts.primary_name ||
-      fonts.body_family ||
-      profile.fonts?.body?.family ||
-      'Inter, system-ui, sans-serif';
-    const headingFamily =
-      fonts.heading_name ||
-      fonts.heading_family ||
-      profile.fonts?.heading?.family ||
-      'var(--font-body)';
-
+    const bodyFamily = fonts.primary?.family || 'Inter, system-ui, sans-serif';
+    const headingFamily = fonts.heading?.family || bodyFamily;
     root.style.setProperty('--font-body', bodyFamily);
     root.style.setProperty('--font-heading', headingFamily);
     document.body.style.fontFamily = 'var(--font-body)';
-  } else {
-    loadFonts(profile.fonts);
   }
 
   // --- Brand tokens ---------------------------------------------------------
@@ -409,7 +373,7 @@ export function applySurfaceVideos(profile) {
 }
 
 let defaultFontLoaded = false;
-async function loadFonts(fonts) {
+async function loadFonts() {
   // Ensure default Inter is loaded to avoid flashes.
   if (!defaultFontLoaded) {
     const interHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
@@ -420,29 +384,5 @@ async function loadFonts(fonts) {
       document.head.appendChild(link);
     }
     defaultFontLoaded = true;
-  }
-
-  if (!fonts) return;
-
-  const urls = [];
-  const bodyUrl = fonts.body?.url;
-  const headingUrl = fonts.heading?.url;
-  if (bodyUrl) urls.push(bodyUrl);
-  if (headingUrl && headingUrl !== bodyUrl) urls.push(headingUrl);
-
-  const existing = Array.from(document.head.querySelectorAll('link[data-profile-font]'));
-
-  for (const url of urls) {
-    if (!document.head.querySelector(`link[href="${url}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = url;
-      link.dataset.profileFont = 'true';
-      document.head.appendChild(link);
-    }
-  }
-
-  for (const link of existing) {
-    if (!urls.includes(link.href)) link.remove();
   }
 }
