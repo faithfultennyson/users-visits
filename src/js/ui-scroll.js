@@ -1,6 +1,17 @@
 export function initializeScroll() {
     const backToTopButton = document.getElementById('backToTop');
-    
+    const footer = document.querySelector('.footer');
+    const PRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let stickyTimer;
+
+    function setFooterSticky(enable) {
+        clearTimeout(stickyTimer);
+        if (!footer) return;
+        stickyTimer = setTimeout(() => {
+            footer.classList.toggle('sticky', enable);
+        }, 5000);
+    }
+
     function getTriggerHeight() {
         const isMobile = window.innerWidth <= 768;
         const isLandscape = window.innerWidth > window.innerHeight;
@@ -24,7 +35,7 @@ export function initializeScroll() {
     function scrollToTop() {
         window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: PRM ? 'auto' : 'smooth'
         });
     }
 
@@ -35,4 +46,5 @@ export function initializeScroll() {
         handleScroll(); // Re-check scroll position
     });
     backToTopButton?.addEventListener('click', scrollToTop);
+    setFooterSticky(true);
 }

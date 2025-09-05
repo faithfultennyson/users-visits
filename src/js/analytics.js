@@ -1,13 +1,14 @@
 import { createPayload, initializeBeacon } from './beacon.js';
 
 const QUEUE_KEY = 'cg_queue';
+const memoryQueue = [];
 
 function loadQueue() {
     try {
         const stored = sessionStorage.getItem(QUEUE_KEY);
-        return stored ? JSON.parse(stored) : [];
+        return stored ? JSON.parse(stored) : memoryQueue;
     } catch (e) {
-        return [];
+        return memoryQueue;
     }
 }
 
@@ -15,7 +16,8 @@ function saveQueue() {
     try {
         sessionStorage.setItem(QUEUE_KEY, JSON.stringify(eventQueue));
     } catch (e) {
-        // ignore storage errors
+        memoryQueue.length = 0;
+        memoryQueue.push(...eventQueue);
     }
 }
 

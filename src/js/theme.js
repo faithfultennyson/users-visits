@@ -10,13 +10,50 @@ export function applyTheme(profile) {
   const root = document.documentElement;
 
   // --- Fonts ---------------------------------------------------------------
-  const bodyFamily = profile.fonts?.body?.family || 'Inter, system-ui, sans-serif';
-  const headingFamily = profile.fonts?.heading?.family || bodyFamily;
+  const fonts = profile.typography?.fonts;
 
-  root.style.setProperty('--font-body', bodyFamily);
-  root.style.setProperty('--font-heading', headingFamily);
-  document.body.style.fontFamily = 'var(--font-body)';
-  loadFonts(profile.fonts);
+  if (fonts) {
+    const urls = [];
+    const bodyUrl = fonts.primary_url || fonts.body_url;
+    const headingUrl = fonts.heading_url;
+    if (bodyUrl) urls.push(bodyUrl);
+    if (headingUrl && headingUrl !== bodyUrl) urls.push(headingUrl);
+
+    const existing = Array.from(
+      document.head.querySelectorAll('link[data-profile-font]')
+    );
+
+    for (const url of urls) {
+      if (!document.head.querySelector(`link[href="${url}"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = url;
+        link.dataset.profileFont = 'true';
+        document.head.appendChild(link);
+      }
+    }
+
+    for (const link of existing) {
+      if (!urls.includes(link.href)) link.remove();
+    }
+
+    const bodyFamily =
+      fonts.primary_name ||
+      fonts.body_family ||
+      profile.fonts?.body?.family ||
+      'Inter, system-ui, sans-serif';
+    const headingFamily =
+      fonts.heading_name ||
+      fonts.heading_family ||
+      profile.fonts?.heading?.family ||
+      'var(--font-body)';
+
+    root.style.setProperty('--font-body', bodyFamily);
+    root.style.setProperty('--font-heading', headingFamily);
+    document.body.style.fontFamily = 'var(--font-body)';
+  } else {
+    loadFonts(profile.fonts);
+  }
 
   // --- Brand tokens ---------------------------------------------------------
   root.style.setProperty('--brand-primary', profile.brand.primary);

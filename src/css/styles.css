@@ -772,3 +772,13 @@ body[data-gradient="true"] {
 .description .create-link:hover {
     opacity: 1;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .back-to-top {
+    animation: none !important;
+  }
+}
