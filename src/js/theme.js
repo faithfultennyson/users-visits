@@ -312,7 +312,9 @@ function ensureSurfaceVideo(host, src, className) {
       zIndex: '-1',
       pointerEvents: 'none'
     });
-    host.style.position = host.style.position || 'relative';
+    // Preserve existing positioning like fixed or sticky; only adjust if static
+    const pos = getComputedStyle(host).position;
+    if (pos === 'static') host.style.position = 'relative';
     host.prepend(v); // behind content
   }
   if (v.src !== src) v.src = src;
