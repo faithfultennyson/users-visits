@@ -7,6 +7,16 @@ export function applyHeadMeta(profile) {
   addLink({ rel:'icon', type:'image/png', sizes:'16x16', href: fav.png16 || '/assets/favicon/favicon-16.png' });
   addLink({ rel:'apple-touch-icon', sizes:'180x180', href: fav.apple || '/assets/favicon/apple-touch-icon.png' });
 
+  // ----- Fonts
+  const fontPrimary = profile?.fonts?.primary;
+  const fontHeading = profile?.fonts?.heading;
+  const fontUrls = [];
+  if (fontPrimary?.css_url) fontUrls.push(fontPrimary.css_url);
+  if (fontHeading?.css_url && fontHeading.css_url !== fontPrimary?.css_url) {
+    fontUrls.push(fontHeading.css_url);
+  }
+  fontUrls.forEach(url => addLink({ rel: 'stylesheet', href: url }));
+
   // ----- TEXT
   const handle = profile?.handle?.trim();
   const desc   = profile?.description?.body?.trim();

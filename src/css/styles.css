@@ -592,6 +592,10 @@ body[data-gradient="true"] {
     gap: var(--footer-gap);
 }
 
+.footer-links a {
+    text-decoration: none;
+}
+
 .footer-links img {
     width: var(--footer-icon-size);
     height: var(--footer-icon-size);
@@ -773,12 +777,3 @@ body[data-gradient="true"] {
     opacity: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-  .back-to-top {
-    animation: none !important;
-  }
-}

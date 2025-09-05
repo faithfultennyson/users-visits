@@ -31,7 +31,20 @@
     "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
   },
 
-   "cards": { "shape": "blocky", "radius_px": 18, "bevel_px": 10 },
+  "cards": { "shape": "blocky", "radius_px": 18, "bevel_px": 10 },
+
+  "fonts": {
+    "primary": {
+      "family": "'Bebas Neue', sans-serif",
+      "weights": ["400"],
+      "css_url": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+    },
+    "heading": {
+      "family": "'Merriweather', serif",
+      "weights": ["400", "700"],
+      "css_url": "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+    }
+  },
 
   "surfaces": {
     "background": { "mode": "video", "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },

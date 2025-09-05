@@ -2,20 +2,37 @@ import { createPayload, initializeBeacon } from './beacon.js';
 
 const QUEUE_KEY = 'cg_queue';
 const memoryQueue = [];
+let storageAvailable = true;
+let storageWarned = false;
 
 function loadQueue() {
     try {
         const stored = sessionStorage.getItem(QUEUE_KEY);
         return stored ? JSON.parse(stored) : memoryQueue;
     } catch (e) {
+        if (!storageWarned) {
+            console.warn('analytics storage unavailable', e);
+            storageWarned = true;
+        }
+        storageAvailable = false;
         return memoryQueue;
     }
 }
 
 function saveQueue() {
+    if (!storageAvailable) {
+        memoryQueue.length = 0;
+        memoryQueue.push(...eventQueue);
+        return;
+    }
     try {
         sessionStorage.setItem(QUEUE_KEY, JSON.stringify(eventQueue));
     } catch (e) {
+        if (!storageWarned) {
+            console.warn('analytics storage unavailable', e);
+            storageWarned = true;
+        }
+        storageAvailable = false;
         memoryQueue.length = 0;
         memoryQueue.push(...eventQueue);
     }

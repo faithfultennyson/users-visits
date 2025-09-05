@@ -1,12 +1,18 @@
+import { reduceMotion } from './a11y.js';
+
 export function initializeScroll() {
     const backToTopButton = document.getElementById('backToTop');
     const footer = document.querySelector('.footer');
-    const PRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let stickyTimer;
 
     function setFooterSticky(enable) {
         clearTimeout(stickyTimer);
         if (!footer) return;
+        if (reduceMotion) {
+            footer.style.transition = 'none';
+            footer.classList.toggle('sticky', enable);
+            return;
+        }
         stickyTimer = setTimeout(() => {
             footer.classList.toggle('sticky', enable);
         }, 5000);
@@ -35,7 +41,7 @@ export function initializeScroll() {
     function scrollToTop() {
         window.scrollTo({
             top: 0,
-            behavior: PRM ? 'auto' : 'smooth'
+            behavior: reduceMotion ? 'auto' : 'smooth'
         });
     }
 
