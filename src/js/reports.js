@@ -61,10 +61,10 @@ function hideMenu() {
 }
 
 function showModal(reason) {
-    const uid = activeCard.dataset.uid;
-    trackReportOpen(uid, reason);
-    
-    document.getElementById('reportUid').value = uid;
+    const cardPublicHash = activeCard.dataset.cardPublicHash;
+    trackReportOpen(cardPublicHash, reason);
+
+    document.getElementById('reportCardHash').value = cardPublicHash;
     document.getElementById('reportType').value = reason;
     
     modal.classList.add('visible');
@@ -117,7 +117,7 @@ export function initializeReports() {
         e.preventDefault();
         const formData = new FormData(e.target);
         const reportData = {
-            uid: formData.get('uid'),
+            card_public_hash: formData.get('card_public_hash'),
             type: formData.get('type'),
             message: formData.get('message'),
             contact: {
@@ -125,9 +125,9 @@ export function initializeReports() {
                 email: formData.get('email') || null
             }
         };
-        
-        markCardReported(reportData.uid);
-        trackReportSubmit(reportData.uid, reportData);
+
+        markCardReported(reportData.card_public_hash);
+        trackReportSubmit(reportData.card_public_hash, reportData);
         showSuccess();
     });
 
