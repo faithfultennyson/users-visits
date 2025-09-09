@@ -114,16 +114,16 @@ export function trackPageView() {
     }, 2000);
 }
 
-export function trackCardImpression(uid) {
+export function trackCardImpression(cardPublicHash) {
     trackEvent('card_impression', {
-        uid,
+        card_public_hash: cardPublicHash,
         dwell_time: totalDwellTime
     });
 }
 
-export function trackCardClick(uid) {
+export function trackCardClick(cardPublicHash) {
     trackEvent('card_click', {
-        uid,
+        card_public_hash: cardPublicHash,
         dwell_time: totalDwellTime
     });
 }
@@ -136,17 +136,17 @@ export function trackHeaderLinkClick(href, source = 'header') {
     });
 }
 
-export function trackReportOpen(uid, reason) {
+export function trackReportOpen(cardPublicHash, reason) {
     trackEvent('report_open', {
-        uid,
+        card_public_hash: cardPublicHash,
         reason,
         dwell_time: totalDwellTime
     });
 }
 
-export function trackReportSubmit(uid, reportData) {
+export function trackReportSubmit(cardPublicHash, reportData) {
     trackEvent('report_submit', {
-        uid,
+        card_public_hash: cardPublicHash,
         report_type: reportData.type,
         message: reportData.message,
         contact: reportData.contact,
@@ -167,8 +167,8 @@ export function initializeAnalytics() {
         (entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-                    const uid = entry.target.dataset.uid;
-                    if (uid) trackCardImpression(uid);
+                    const cardPublicHash = entry.target.dataset.cardPublicHash;
+                    if (cardPublicHash) trackCardImpression(cardPublicHash);
                     observer.unobserve(entry.target);
                 }
             });
@@ -177,7 +177,7 @@ export function initializeAnalytics() {
     );
 
     // Observe all cards
-    document.querySelectorAll('.card[data-uid]').forEach(card => {
+    document.querySelectorAll('.card[data-card-public-hash]').forEach(card => {
         observer.observe(card);
     });
 

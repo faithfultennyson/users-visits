@@ -224,12 +224,12 @@ const card_public_hash = [
 // Generate random mock cards
 function generateMockCards(count = 200000) {
     return Array.from({ length: count }, (_, i) => ({
-        uid: card_public_hash[i % card_public_hash.length],
+        card_public_hash: card_public_hash[i % card_public_hash.length],
         imageUrl: mockImages[i % mockImages.length],
         title: mocktitles[i % mocktitles.length],
         targetUrl: 'https://example.com',
         source: i % 2 === 0 ? 'ig' : 'tt',
-        index: i // Add index property, 
+        index: i // Add index property,
     }));
 }
 

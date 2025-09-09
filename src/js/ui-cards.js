@@ -33,7 +33,7 @@ function setupObservers() {
                     img.src = img.dataset.src;
                     delete img.dataset.src;
                 }
-                trackCardImpression(card.dataset.uid);
+                trackCardImpression(card.dataset.cardPublicHash);
                 cardObserver.unobserve(card);
             }
         });
@@ -116,7 +116,7 @@ function isSafeUrl(url) {
 /* ---------------- DOM builders ---------------- */
 
 function createCardElement(card) {
-  const uid = card?.uid || '';
+  const cardPublicHash = card?.card_public_hash || '';
   const targetUrl = card?.targetUrl || '#';
   const title = card?.title || '';
   const imageUrl = card?.imageUrl || '';
@@ -126,7 +126,7 @@ function createCardElement(card) {
   cardEl.className = 'card';
   cardEl.setAttribute('target', '_blank');
   cardEl.setAttribute('rel', 'noopener');
-  cardEl.dataset.uid = uid;
+  cardEl.dataset.cardPublicHash = cardPublicHash;
   cardEl.dataset.source = source;
   cardEl.setAttribute('data-source', source);
   cardEl.setAttribute('href', isSafeUrl(targetUrl) ? targetUrl : '#');
@@ -156,7 +156,7 @@ function createCardElement(card) {
   btn.className = 'icon-btn dot-btn';
   btn.type = 'button';
   btn.setAttribute('aria-label', 'Report or more actions');
-  if (isCardReported(uid)) btn.setAttribute('disabled', '');
+  if (isCardReported(cardPublicHash)) btn.setAttribute('disabled', '');
   btn.textContent = '⋯';
   cardEl.appendChild(btn);
 
@@ -177,7 +177,7 @@ function createCardElement(card) {
   cardEl.appendChild(fbDiv);
 
   cardEl.addEventListener('click', (e) => {
-    if (!e.target.closest('.dot-btn')) trackCardClick(uid);
+    if (!e.target.closest('.dot-btn')) trackCardClick(cardPublicHash);
   });
 
   if (!reduceMotion) {
