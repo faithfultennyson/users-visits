@@ -1,5 +1,5 @@
 {
-  "handle": "your-Guy Never sleep Ohhh",
+  "handle": "Take_Down",
 
   "brand": {
     "primary": "#26C6DA",
@@ -31,7 +31,7 @@
     "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
   },
 
-  "cards": { "shape": "blocky", "radius_px": 18, "bevel_px": 10 },
+  "cards": { "shape": "round", "radius_px": 18, "bevel_px": 10 },
 
   "fonts": {
     "primary": {
@@ -46,13 +46,30 @@
     }
   },
 
-  "surfaces": {
-    "background": { "mode": "video", "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
-    "header":     { "mode": "glass", "video": { "url": "/assets/videos/video.webm", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.20, "blur_px": 15 } },
-    "footer":     { "mode": "glass", "image": { "url": null }, "glass": { "opacity": 0.2, "blur_px": 15 } },
-    "desc_band":  { "mode": "glass", "video": { "url": "/assets/videos/video.webm", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.20, "blur_px": 15 } }
   
+
+  "surfaces": {
+  "background": { "mode": "gradient",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 },
+    "glass": { "opacity": 0.0, "blur_px": 0 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
   },
+  "header": { "mode": "gradient",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 },
+    "glass": { "opacity": 0.10, "blur_px": 15 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
+  },
+  "footer": { "mode": "gradient",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" },
+    "glass": { "opacity": 0.20, "blur_px": 15 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
+  },
+  "desc_band": { "mode": "solid",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" },
+    "glass": { "opacity": 0.8, "blur_px": 35 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
+  }
+},
 
   "sizes": {
     "header_height_px": 94,

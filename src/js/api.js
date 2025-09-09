@@ -205,12 +205,26 @@ const mocktitles = [
 ];
 
 
+const card_public_hash = [
+  "317777ba8936",
+  "4c7c985d7874",
+  "ccbf495b4f98",
+  "908313bc4b0e",
+  "cef6942a231c",
+  "38d20c2058f5",
+  "2ec45f02ae97",
+  "f0423e4abf65",
+  "a571a44e847e",
+  "b63e46577fad"
+];
+
+
 
 
 // Generate random mock cards
 function generateMockCards(count = 200000) {
     return Array.from({ length: count }, (_, i) => ({
-        uid: `card-${i}`,
+        uid: card_public_hash[i % card_public_hash.length],
         imageUrl: mockImages[i % mockImages.length],
         title: mocktitles[i % mocktitles.length],
         targetUrl: 'https://example.com',
