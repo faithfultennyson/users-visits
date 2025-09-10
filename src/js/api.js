@@ -235,6 +235,10 @@ function generateMockCards(count = 200000) {
 
 // Mock API calls
 export async function getPublicProfile() {
+    // Allow preloaded data from server-rendered pages
+    if (typeof window !== 'undefined' && window.profileData) {
+        return window.profileData;
+    }
     console.log('Fetching public profile...');
     const res = await fetch('/config/profile.json');
     if (!res.ok) throw new Error('Failed to load profile');
@@ -242,6 +246,10 @@ export async function getPublicProfile() {
 }
 
 export async function getLinksConfig() {
+    // Allow preloaded data from server-rendered pages
+    if (typeof window !== 'undefined' && window.linksData) {
+        return window.linksData;
+    }
     console.log('Fetching links config...');
     const res = await fetch('/config/links.json');
     if (!res.ok) throw new Error('Failed to load links');

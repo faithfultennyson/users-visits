@@ -13,8 +13,9 @@ import { reduceMotion } from './a11y.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // ---- loader DOM + freeze scroll -----------------------------------------
-  const unfreeze = freezeScroll();
-  const loader = mountLoader(); // returns {root, logo}
+  const preloadedProfile = typeof window !== 'undefined' && window.profileData;
+  const unfreeze = preloadedProfile ? () => {} : freezeScroll();
+  const loader = preloadedProfile ? { root: null, logo: null } : mountLoader();
 
   try {
     // base UI (fonts, header shell, reports)
@@ -22,9 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeHeader();
     initializeReports();
 
-    // fetch
+    // fetch or use preloaded data
     const [profile, cards] = await Promise.all([
-      getPublicProfile(),
+      preloadedProfile ? Promise.resolve(window.profileData) : getPublicProfile(),
       getPublicCards(),
     ]);
 
