@@ -6,7 +6,7 @@
     "quick": [
       { "icon": "social-instagram_icon", "href": "https://instagram.com/your", "aria": "Instagram" },
       { "icon": "social-tiktok_icon",    "href": "https://tiktok.com/@your",   "aria": "TikTok" },
-      { "icon": "web_icon",              "href": "https://esegames.com",       "aria": "Website" }
+      { "icon": "web_icon",              "href": "https://esegames.com",       "aria": "Esegames" }
     ],
     "overflow": [
       { "icon": "mail_icon",            "href": "mailto:hello@yoursite.com", "title": "Email",  "aria": "Email" },
@@ -34,7 +34,7 @@
 
     "text_links": [
       { "label": "Privacy Policy", "href": "/privacy", "fixed": true },
-      { "label": "Create Account", "href": "/signup",  "show": true }
+      { "label": "Create Account", "href": "/signup",  "show": false }
     ],
 
     "disclaimer": "All logos are property of their respective owners."

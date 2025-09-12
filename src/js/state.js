@@ -24,7 +24,7 @@ export const getCurrentFilter = () => state.currentFilter;
 export const getCurrentPage = () => state.currentPage;
 export const getProfile = () => state.profile;
 export const getLinksConfig = () => state.linksConfig;
-export const isCardReported = (uid) => state.reportedCards.has(uid);
+export const isCardReported = (cardPublicHash) => state.reportedCards.has(cardPublicHash);
 
 // Setters
 export const setCards = (cards) => {
@@ -46,9 +46,9 @@ export const incrementPage = () => {
 
 import { saveReportedCards } from './beacon.js';
 
-export const markCardReported = (uid) => {
-    logStateChange('markCardReported', { uid });
-    state.reportedCards.add(uid);
+export const markCardReported = (cardPublicHash) => {
+    logStateChange('markCardReported', { public_hash: cardPublicHash });
+    state.reportedCards.add(cardPublicHash);
     saveReportedCards(state.reportedCards);
 };
 

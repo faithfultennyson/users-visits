@@ -1,5 +1,6 @@
 import { getCards, getCurrentFilter, isCardReported, setCards, setFilter } from './state.js';
 import { trackCardClick, trackCardImpression } from './analytics.js';
+import { reduceMotion } from './a11y.js';
 
 // Constants for virtualization
 const INITIAL_RENDER = 48;  // First batch size
@@ -32,7 +33,7 @@ function setupObservers() {
                     img.src = img.dataset.src;
                     delete img.dataset.src;
                 }
-                trackCardImpression(card.dataset.uid);
+                trackCardImpression(card.dataset.cardPublicHash);
                 cardObserver.unobserve(card);
             }
         });
@@ -115,7 +116,7 @@ function isSafeUrl(url) {
 /* ---------------- DOM builders ---------------- */
 
 function createCardElement(card) {
-  const uid = card?.uid || '';
+  const cardPublicHash = card?.public_hash || '';
   const targetUrl = card?.targetUrl || '#';
   const title = card?.title || '';
   const imageUrl = card?.imageUrl || '';
@@ -125,7 +126,7 @@ function createCardElement(card) {
   cardEl.className = 'card';
   cardEl.setAttribute('target', '_blank');
   cardEl.setAttribute('rel', 'noopener');
-  cardEl.dataset.uid = uid;
+  cardEl.dataset.cardPublicHash = cardPublicHash;
   cardEl.dataset.source = source;
   cardEl.setAttribute('data-source', source);
   cardEl.setAttribute('href', isSafeUrl(targetUrl) ? targetUrl : '#');
@@ -155,7 +156,7 @@ function createCardElement(card) {
   btn.className = 'icon-btn dot-btn';
   btn.type = 'button';
   btn.setAttribute('aria-label', 'Report or more actions');
-  if (isCardReported(uid)) btn.setAttribute('disabled', '');
+  if (isCardReported(cardPublicHash)) btn.setAttribute('disabled', '');
   btn.textContent = '⋯';
   cardEl.appendChild(btn);
 
@@ -176,24 +177,26 @@ function createCardElement(card) {
   cardEl.appendChild(fbDiv);
 
   cardEl.addEventListener('click', (e) => {
-    if (!e.target.closest('.dot-btn')) trackCardClick(uid);
+    if (!e.target.closest('.dot-btn')) trackCardClick(cardPublicHash);
   });
 
-  let pressTimer;
-  cardEl.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.dot-btn')) return;
-    pressTimer = setTimeout(async () => {
-      try {
-        await navigator.clipboard.writeText(targetUrl);
-        fbDiv.classList.add('visible');
-        setTimeout(() => fbDiv.classList.remove('visible'), 1500);
-      } catch {}
-    }, 500);
-  });
+  if (!reduceMotion) {
+    let pressTimer;
+    cardEl.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.dot-btn')) return;
+      pressTimer = setTimeout(async () => {
+        try {
+          await navigator.clipboard.writeText(targetUrl);
+          fbDiv.classList.add('visible');
+          setTimeout(() => fbDiv.classList.remove('visible'), 1500);
+        } catch {}
+      }, 500);
+    });
 
-  ['mouseup', 'mouseleave'].forEach(evt =>
-    cardEl.addEventListener(evt, () => clearTimeout(pressTimer))
-  );
+    ['mouseup', 'mouseleave'].forEach(evt =>
+      cardEl.addEventListener(evt, () => clearTimeout(pressTimer))
+    );
+  }
 
   return cardEl;
 }

@@ -190,7 +190,7 @@ html {
      border-radius: var(--description-border-radius);
      color: white;
      position: relative;
-     z-index: 1001; /* Higher than the dot button */
+     z-index: 200; /* Higher than the dot button */
 }
 
 /* keep text in a centered box even when the band is full-bleed */
@@ -322,6 +322,7 @@ body[data-gradient="true"] {
   color: var(--text);
   cursor: pointer;
   font-size: clamp(2rem, 8vw, 2.5rem);
+  
 }
 
 #hamburgerMenu {
@@ -592,6 +593,10 @@ body[data-gradient="true"] {
     gap: var(--footer-gap);
 }
 
+.footer-links a {
+    text-decoration: none;
+}
+
 .footer-links img {
     width: var(--footer-icon-size);
     height: var(--footer-icon-size);
@@ -773,12 +778,3 @@ body[data-gradient="true"] {
     opacity: 1;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-  .back-to-top {
-    animation: none !important;
-  }
-}
