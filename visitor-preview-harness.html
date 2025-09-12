@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Visitor Preview Harness</title>
+<style>
+:root {
+  --brand-primary: #26C6DA;
+  --brand-secondary: #4361EE;
+  --brand-tertiary: #3A0CA3;
+  --brand-text: #121212;
+  --creator-bg: var(--brand-text);
+  --creator-gradient: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  --creator-card-radius: 18px;
+  --card-bg: #1e1e1e;
+  --text: #ffffff;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin:0;
+  background: var(--creator-bg);
+  color: var(--text);
+}
+#controls {padding:0.5rem;background:#000;color:#fff;display:flex;gap:1rem;align-items:center;}
+#controls label{font-size:0.8rem;}
+.tabs {display:flex;gap:0.5rem;padding:0.5rem;background:#111;}
+.tabs button {background:#222;color:#fff;border:1px solid #444;padding:0.4rem 0.8rem;cursor:pointer;}
+.tabs button[aria-selected="true"]{background:#555;}
+.tab {display:none;}
+.tab.active{display:block;}
+.stage{position:relative;width:100%;aspect-ratio:16/9;border:1px solid #555;overflow:auto;}
+.checkerboard{background-size:20px 20px;background-position:0 0,10px 10px;background-image:linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666),linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666);}
+header{display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(255,255,255,0.1);backdrop-filter:blur(15px);}
+header .branding{display:flex;align-items:center;gap:0.5rem;}
+.description{max-width:60ch;margin:2rem auto;text-align:center;padding:1rem;background:rgba(255,255,255,0.1);backdrop-filter:blur(15px);border-radius:var(--creator-card-radius);}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1rem;}
+.card{background:var(--card-bg);border-radius:var(--creator-card-radius);height:0;padding-bottom:129%;position:relative;overflow:hidden;}
+.card span{position:absolute;bottom:0;left:0;right:0;padding:0.5rem;font-size:0.9rem;background:rgba(0,0,0,0.6);}
+footer{padding:1rem;text-align:center;background:rgba(0,0,0,0.2);backdrop-filter:blur(15px);}
+.background{width:100%;height:100vh;}
+</style>
+<script>
+const config = {
+  profile: {
+    "handle": "Take_Down",
+    "brand": {
+      "primary": "#26C6DA",
+      "secondary": "#4361EE",
+      "tertiary": "#3A0CA3",
+      "text": "#121212"
+    },
+    "assets": {
+      "favicon": {
+        "png16": "/assets/logo.png",
+        "png32": "/assets/logo.png",
+        "apple": "/assets/logo.png",
+        "svg": null
+      },
+      "social_image": "/assets/og/default-og.png"
+    },
+    "colors": {
+      "page_bg": "#121212",
+      "accent": "#26C6DA",
+      "gradient": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))",
+      "header_text": "#FFFFFF",
+      "desc_title_text": "#26C6DA",
+      "desc_body_text": "#FFFFFF",
+      "card_title_text": "#FFFFFF",
+      "footer_text": "#CCCCCC",
+      "card_bg": "#121212",
+      "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
+    },
+    "cards": {"shape": "round", "radius_px": 18, "bevel_px": 10},
+    "fonts": {
+      "primary": {
+        "family": "'Bebas Neue', sans-serif",
+        "weights": ["400"],
+        "css_url": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      },
+      "heading": {
+        "family": "'Merriweather', serif",
+        "weights": ["400", "700"],
+        "css_url": "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+      }
+    },
+    "surfaces": {
+      "background": {
+        "mode": "gradient",
+        "image": {
+          "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop",
+          "fit": "cover",
+          "pos": "center",
+          "tint": 0,
+          "blur_px": 0
+        },
+        "glass": {"opacity": 0.0, "blur_px": 0},
+        "video": {"url": "/assets/videos/video.webm", "fit": "cover"}
+      },
+      "header": {
+        "mode": "gradient",
+        "image": {
+          "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop",
+          "fit": "cover",
+          "pos": "center",
+          "tint": 0,
+          "blur_px": 0
+        },
+        "glass": {"opacity": 0.10, "blur_px": 15},
+        "video": {"url": "/assets/videos/video.webm", "fit": "cover"}
+      },
+      "footer": {
+        "mode": "gradient",
+        "image": {
+          "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop",
+          "fit": "cover",
+          "pos": "center"
+        },
+        "glass": {"opacity": 0.20, "blur_px": 15},
+        "video": {"url": "/assets/videos/video.webm", "fit": "cover"}
+      },
+      "desc_band": {
+        "mode": "solid",
+        "image": {
+          "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop",
+          "fit": "cover",
+          "pos": "center"
+        },
+        "glass": {"opacity": 0.8, "blur_px": 35},
+        "video": {"url": "/assets/videos/video.webm", "fit": "cover"}
+      }
+    },
+    "sizes": {
+      "header_height_px": 94,
+      "footer_padding_y_px": 52,
+      "logo_px": 64
+    },
+    "typography": {
+      "header_rem": 1.70,
+      "header_weight": 600,
+      "desc_title_rem": 1.20,
+      "desc_title_weight": 800,
+      "desc_body_rem": 1.00,
+      "desc_body_weight": 400,
+      "card_title_rem": 1.00,
+      "card_title_weight": 800,
+      "footer_rem": 0.95,
+      "footer_weight": 500
+    },
+    "clamp": {
+      "tiny_desc_lines": 1,
+      "desc_body_lines": 3,
+      "card_title_lines": 2
+    },
+    "layout": {
+      "header_quick_alignment": "right",
+      "description_align": "center"
+    },
+    "description": {
+      "visible": true,
+      "sticky": true,
+      "width": "mid",
+      "title": "Welcome to my creative space",
+      "body": "Explore my latest content from Instagram and TikTok. Feel free to browse through my curated collection of posts and connect with me on various social platforms",
+      "marketing_link": {
+        "show": true,
+        "text": "Create your own creative space"
+      }
+    }
+  },
+  links: {
+    "icons": {"base_path": "/assets/icons/"},
+    "profile-image": {"base_path": "/assets/profile-image/", "logo": "logo"},
+    "header": {
+      "quick": [
+        {"icon": "social-instagram_icon", "href": "https://instagram.com/your", "aria": "Instagram"},
+        {"icon": "social-tiktok_icon",    "href": "https://tiktok.com/@your",   "aria": "TikTok"},
+        {"icon": "web_icon",              "href": "https://esegames.com",       "aria": "Esegames"}
+      ],
+      "overflow": [
+        {"icon": "mail_icon",            "href": "mailto:hello@yoursite.com", "title": "Email",  "aria": "Email"},
+        {"icon": "phone_icon",           "href": "tel:+2348000000000",        "title": "Call",   "aria": "Phone"},
+        {"icon": "social-discord_icon",  "href": "https://discord.gg/abc",    "title": "Discord","aria": "Discord"},
+        {"icon": "social-linkedin_icon", "href": "https://linkedin.com/in/you", "title": "LinkedIn","aria": "LinkedIn"},
+        {"icon": "social-youtube_icon",  "href": "https://youtube.com/your",   "title": "YouTube","aria": "YouTube"},
+        {"icon": "social-x_icon",  "href": "https://twitter.com/your",   "title": "Twitter/X","aria": "Twitter"},
+        {"icon": "social-facebook_icon", "href": "https://facebook.com/your",   "title": "Facebook","aria": "Facebook"},
+        {"icon": "social-pinterest_icon","href": "https://pinterest.com/your",  "title": "Pinterest","aria": "Pinterest"},
+        {"icon": "social-github_icon",   "href": "https://github.com",           "title": "GitHub",  "aria": "GitHub"}
+      ]
+    },
+    "footer": {
+      "visible": true,
+      "icons": [
+        {"icon": "social-whatsapp_icon",  "href": "https://wa.me/...",          "aria": "WhatsApp"},
+        {"icon": "social-instagram_icon", "href": "https://instagram.com/...",  "aria": "Instagram"},
+        {"icon": "social-tiktok_icon",    "href": "https://tiktok.com/@...",    "aria": "TikTok"},
+        {"icon": "social-youtube_icon",   "href": "https://youtube.com/...",    "aria": "YouTube"},
+        {"icon": "social-linkedin_icon",  "href": "https://linkedin.com/...",   "aria": "LinkedIn"}
+      ],
+      "text_links": [
+        {"label": "Privacy Policy", "href": "/privacy", "fixed": true},
+        {"label": "Create Account", "href": "/signup",  "show": false}
+      ],
+      "disclaimer": "All logos are property of their respective owners."
+    }
+  }
+};
+
+function applyTheme(){
+  document.documentElement.style.setProperty('--creator-card-radius', config.profile.cards.radius_px + 'px');
+  document.body.style.background = config.profile.colors.page_bg;
+}
+
+function renderHeader(container){
+  container.innerHTML = '';
+  const h = document.createElement('header');
+  const branding = document.createElement('div');
+  branding.className = 'branding';
+  const span = document.createElement('span');
+  span.textContent = '@' + config.profile.handle;
+  branding.appendChild(span);
+  const nav = document.createElement('nav');
+  config.links.header.quick.slice(0,3).forEach(q => {
+    const a = document.createElement('a');
+    a.href = q.href; a.textContent = q.aria; a.target = '_blank';
+    nav.appendChild(a);
+  });
+  h.appendChild(branding); h.appendChild(nav);
+  container.appendChild(h);
+}
+
+function renderDescription(container){
+  container.innerHTML = '';
+  if(!config.profile.description.visible) return;
+  const d = document.createElement('div');
+  d.className = 'description';
+  const h1 = document.createElement('h1'); h1.textContent = config.profile.description.title; d.appendChild(h1);
+  const p = document.createElement('p'); p.textContent = config.profile.description.body; d.appendChild(p);
+  container.appendChild(d);
+}
+
+function renderCards(container){
+  container.innerHTML = '';
+  const g = document.createElement('div'); g.className = 'cards';
+  for(let i=1;i<=4;i++){
+    const c = document.createElement('div'); c.className = 'card';
+    const s = document.createElement('span'); s.textContent = 'Card '+i; c.appendChild(s);
+    g.appendChild(c);
+  }
+  container.appendChild(g);
+}
+
+function renderFooter(container){
+  container.innerHTML='';
+  const f = document.createElement('footer');
+  const div = document.createElement('div');
+  config.links.footer.text_links.forEach(t=>{
+    if(t.show===false) return;
+    const a=document.createElement('a'); a.href=t.href; a.textContent=t.label; a.style.margin='0 0.5rem';
+    div.appendChild(a);
+  });
+  f.appendChild(div);
+  f.appendChild(document.createElement('div')).textContent=config.links.footer.disclaimer;
+  container.appendChild(f);
+}
+
+function renderAll(){
+  applyTheme();
+  const stage=document.getElementById('stage-all'); stage.innerHTML='';
+  renderHeader(stage);
+  renderDescription(stage);
+  renderCards(stage);
+  renderFooter(stage);
+}
+
+function renderIndividual(){
+  renderHeader(document.getElementById('stage-header'));
+  renderFooter(document.getElementById('stage-footer'));
+  renderDescription(document.getElementById('stage-description'));
+  renderCards(document.getElementById('stage-cards'));
+  const bg=document.getElementById('stage-background');
+  if(config.profile.surfaces.background.mode==='gradient'){
+    bg.style.background = config.profile.colors.gradient;
+  } else {
+    bg.style.background = config.profile.colors.page_bg;
+  }
+}
+
+function initTabs(){
+  document.querySelectorAll('.tabs button').forEach(btn=>{
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+}
+
+function initControls(){
+  document.getElementById('radius').value=config.profile.cards.radius_px;
+  document.getElementById('bgMode').value=config.profile.surfaces.background.mode;
+  document.getElementById('apply').addEventListener('click',()=>{
+    config.profile.cards.radius_px=parseInt(document.getElementById('radius').value,10);
+    config.profile.surfaces.background.mode=document.getElementById('bgMode').value;
+    renderAll(); renderIndividual();
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderAll();
+  renderIndividual();
+  initTabs();
+  initControls();
+});
+</script>
+</head>
+<body>
+<div id="controls">
+  <label>Card Radius <input type="number" id="radius" min="0" max="50"></label>
+  <label>Background Mode <select id="bgMode"><option value="solid">solid</option><option value="gradient">gradient</option><option value="image">image</option><option value="glass">glass</option></select></label>
+  <button id="apply">Apply</button>
+</div>
+<div class="tabs">
+  <button aria-selected="true" data-tab="tab-all">All</button>
+  <button aria-selected="false" data-tab="tab-header">Header</button>
+  <button aria-selected="false" data-tab="tab-footer">Footer</button>
+  <button aria-selected="false" data-tab="tab-description">Description</button>
+  <button aria-selected="false" data-tab="tab-cards">Cards</button>
+  <button aria-selected="false" data-tab="tab-background">Background</button>
+</div>
+<div id="tab-all" class="tab active"><div id="stage-all" class="stage"></div></div>
+<div id="tab-header" class="tab"><div id="stage-header" class="stage checkerboard" style="height:40vh"></div></div>
+<div id="tab-footer" class="tab"><div id="stage-footer" class="stage checkerboard" style="height:40vh"></div></div>
+<div id="tab-description" class="tab"><div id="stage-description" class="stage checkerboard" style="height:50vh"></div></div>
+<div id="tab-cards" class="tab"><div id="stage-cards" class="stage checkerboard" style="height:60vh"></div></div>
+<div id="tab-background" class="tab"><div id="stage-background" class="background"></div></div>
+</body>
+</html>
