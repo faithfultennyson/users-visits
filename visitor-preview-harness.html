@@ -132,7 +132,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 .description .create-link:hover{opacity:1;}
 
 /* grid & cards */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);max-width:var(--grid-max);width:100%;margin:0 auto;padding:16px;box-sizing:border-box;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);max-width:calc(var(--grid-max) - var(--gap)*2);width:100%;margin:0 auto;padding:var(--gap);box-sizing:border-box;}
 .card{display:flex;flex-direction:column;text-decoration:none;color:inherit;border-radius:var(--creator-card-radius);overflow:hidden;background:var(--card-bg);box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:transform 0.2s ease,box-shadow 0.2s ease;position:relative;}
 .card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.4);}
 .card:active{box-shadow:0 0 0 2px var(--rim) inset;}
@@ -290,6 +290,28 @@ function applyTheme(){
   root.style.setProperty('--hdr-h', p.sizes.header_height_px + 'px');
   root.style.setProperty('--footer-padding-y', p.sizes.footer_padding_y_px + 'px');
   root.style.setProperty('--logo-size', p.sizes.logo_px + 'px');
+
+  const widthMode = (p.description.width || 'short').toLowerCase();
+  const SHORT = 'clamp(320px, 60ch, 720px)';
+  let bandMax = SHORT;
+  let boxMax  = '720px';
+  let pMax    = '600px';
+  let margin  = 'var(--gap) auto';
+  if (widthMode === 'mid') {
+    bandMax = `max(${SHORT}, min(90vw, var(--grid-max)))`;
+    boxMax  = 'min(70vw, var(--grid-max))';
+    pMax    = '70%';
+  }
+  if (widthMode === 'full') {
+    bandMax = '100vw';
+    margin  = 'var(--gap) 0';
+    boxMax  = 'min(90vw, var(--grid-max))';
+    pMax    = 'min(70ch, 90vw)';
+  }
+  root.style.setProperty('--description-max-width', bandMax);
+  root.style.setProperty('--description-margin', margin);
+  root.style.setProperty('--description-content-max', boxMax);
+  root.style.setProperty('--description-p-max', pMax);
 }
 
 function createEl(tag, cls){const el=document.createElement(tag);if(cls)el.className=cls;return el;}
@@ -344,7 +366,6 @@ function renderCards(parent){
     const img=createEl('img','thumb');img.src=config.profile.assets.social_image;img.alt='';
     tw.appendChild(img);card.appendChild(tw);
     const btn=createEl('button','icon-btn dot-btn');btn.type='button';btn.textContent='⋯';card.appendChild(btn);
-
     const footer=createEl('div','card-footer');const h3=createEl('h3','title');h3.textContent=titles[i];footer.appendChild(h3);card.appendChild(footer);
     const fb=createEl('div','copy-feedback');fb.textContent='Link copied!';card.appendChild(fb);
     main.appendChild(card);
@@ -400,27 +421,25 @@ function renderAll(){
   renderCards(screen);
   renderFooter(screen);
   stage.appendChild(screen);
-  requestAnimationFrame(()=>fitStage(stage));
+  fitStage(stage);
 }
 
 function renderHeaderStage(){
   const stage=document.getElementById('stage-header');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-
   renderHeader(screen);
   stage.appendChild(screen);
-  requestAnimationFrame(()=>fitStage(stage));
+  fitStage(stage);
 }
 
 function renderFooterStage(){
   const stage=document.getElementById('stage-footer');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-
   renderFooter(screen);
   stage.appendChild(screen);
-  requestAnimationFrame(()=>fitStage(stage));
+  fitStage(stage);
 }
 
 function renderDescriptionStage(){
@@ -429,17 +448,17 @@ function renderDescriptionStage(){
   const screen=createEl('div','screen');
   renderDescription(screen);
   stage.appendChild(screen);
-  requestAnimationFrame(()=>fitStage(stage));
+  fitStage(stage);
+
 }
 
 function renderCardsStage(){
   const stage=document.getElementById('stage-cards');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-
   renderCards(screen);
   stage.appendChild(screen);
-  requestAnimationFrame(()=>fitStage(stage));
+  fitStage(stage);
 }
 
 function renderBackgroundStage(){
@@ -455,7 +474,7 @@ function renderBackgroundStage(){
     else screen.style.background=config.profile.colors.page_bg;
   }
   stage.appendChild(screen);
-  requestAnimationFrame(()=>fitStage(stage));
+  fitStage(stage);
 }
 
 function initTabs(){
