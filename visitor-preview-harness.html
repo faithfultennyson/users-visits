@@ -66,6 +66,7 @@
     --desc-body-color: #FFFFFF;
     --card-title-color: #FFFFFF;
 
+
     /* Misc */
     --logo-size: 64px;
     --modal-bg: var(--creator-bg);
@@ -343,6 +344,7 @@ function renderCards(parent){
     const img=createEl('img','thumb');img.src=config.profile.assets.social_image;img.alt='';
     tw.appendChild(img);card.appendChild(tw);
     const btn=createEl('button','icon-btn dot-btn');btn.type='button';btn.textContent='⋯';card.appendChild(btn);
+
     const footer=createEl('div','card-footer');const h3=createEl('h3','title');h3.textContent=titles[i];footer.appendChild(h3);card.appendChild(footer);
     const fb=createEl('div','copy-feedback');fb.textContent='Link copied!';card.appendChild(fb);
     main.appendChild(card);
@@ -405,6 +407,7 @@ function renderHeaderStage(){
   const stage=document.getElementById('stage-header');
   stage.innerHTML='';
   const screen=createEl('div','screen');
+
   renderHeader(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
@@ -414,6 +417,7 @@ function renderFooterStage(){
   const stage=document.getElementById('stage-footer');
   stage.innerHTML='';
   const screen=createEl('div','screen');
+
   renderFooter(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
@@ -432,6 +436,7 @@ function renderCardsStage(){
   const stage=document.getElementById('stage-cards');
   stage.innerHTML='';
   const screen=createEl('div','screen');
+
   renderCards(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
