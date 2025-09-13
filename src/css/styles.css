@@ -9,6 +9,10 @@ html {
     font-size: clamp(8px, 1.2vw, 16px);
 }
 
+.surface {
+    width: 100%;
+}
+
 
 /*CARD SECTION */
 

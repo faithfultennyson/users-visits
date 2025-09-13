@@ -94,6 +94,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 /* canvas / stage */
 .stage{position:relative;width:100%;aspect-ratio:16/9;border:1px solid #555;overflow:hidden;}
 .stage .screen{position:absolute;top:0;left:0;display:flex;flex-direction:column;min-height:100%;}
+.surface{width:100%;}
 .checkerboard{background-size:20px 20px;background-position:0 0,10px 10px;background-image:linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666),linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666);}
 
 /* header */
@@ -198,7 +199,8 @@ function applyTheme(){
 
 function createEl(tag, cls){const el=document.createElement(tag);if(cls)el.className=cls;return el;}
 
-function renderHeader(parent){
+function renderHeader(){
+  const surface=createEl('div','surface');
   const header=createEl('header','header h1');
   const content=createEl('div','header-content');
   const branding=createEl('div','branding');
@@ -212,11 +214,15 @@ function renderHeader(parent){
     a.appendChild(img);nav.appendChild(a);
   });
   const hamburger=document.createElement('button');hamburger.id='hamburger';hamburger.setAttribute('aria-label','Menu');hamburger.textContent='☰';
-  content.append(branding,nav,hamburger);header.appendChild(content);parent.appendChild(header);
+  content.append(branding,nav,hamburger);
+  header.appendChild(content);
+  surface.appendChild(header);
+  return surface;
 }
 
-function renderDescription(parent){
-  if(!config.profile.description.visible) return;
+function renderDescription(){
+  if(!config.profile.description.visible) return null;
+  const surface=createEl('div','surface');
   const d=createEl('div','description style-1 align-center');
   d.setAttribute('data-sticky', config.profile.description.sticky);
   const h1=createEl('h1');h1.textContent=config.profile.description.title;d.appendChild(h1);
@@ -224,10 +230,12 @@ function renderDescription(parent){
   if(config.profile.description.marketing_link.show){
     const a=document.createElement('a');a.href='/signup';a.className='create-link';const em=document.createElement('em');em.textContent=config.profile.description.marketing_link.text;a.appendChild(em);d.appendChild(a);
   }
-  parent.appendChild(d);
+  surface.appendChild(d);
+  return surface;
 }
 
-function renderCards(parent){
+function renderCards(){
+  const surface=createEl('div','surface');
   const main=createEl('main','grid');
   for(let i=1;i<=4;i++){
     const card=createEl('a','card');card.href='#';card.target='_blank';
@@ -239,11 +247,13 @@ function renderCards(parent){
     const fb=createEl('div','copy-feedback');fb.textContent='Link copied!';card.appendChild(fb);
     main.appendChild(card);
   }
-  parent.appendChild(main);
+  surface.appendChild(main);
+  return surface;
 }
 
-function renderFooter(parent){
-  if(!config.links.footer.visible) return;
+function renderFooter(){
+  if(!config.links.footer.visible) return null;
+  const surface=createEl('div','surface');
   const footer=createEl('footer','footer');
   const icons=createEl('div','footer-links');
   config.links.footer.icons.forEach(link=>{
@@ -253,7 +263,9 @@ function renderFooter(parent){
   const text=createEl('div','footer-legal');
   config.links.footer.text_links.forEach(t=>{if(t.show===false)return;const a=document.createElement('a');a.href=t.href;a.textContent=t.label;text.appendChild(a);});
   const copy=createEl('div','copyright');copy.textContent=config.links.footer.disclaimer;
-  footer.append(icons,text,copy);parent.appendChild(footer);
+  footer.append(icons,text,copy);
+  surface.appendChild(footer);
+  return surface;
 }
 
 function fitStage(stage){
@@ -276,10 +288,14 @@ function renderAll(){
   const stage=document.getElementById('stage-all');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  renderHeader(screen);
-  renderDescription(screen);
-  renderCards(screen);
-  renderFooter(screen);
+  const header=renderHeader();
+  if(header) screen.appendChild(header);
+  const desc=renderDescription();
+  if(desc) screen.appendChild(desc);
+  const cards=renderCards();
+  if(cards) screen.appendChild(cards);
+  const footer=renderFooter();
+  if(footer) screen.appendChild(footer);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -288,7 +304,8 @@ function renderHeaderStage(){
   const stage=document.getElementById('stage-header');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  renderHeader(screen);
+  const header=renderHeader();
+  if(header) screen.appendChild(header);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -297,7 +314,8 @@ function renderFooterStage(){
   const stage=document.getElementById('stage-footer');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  renderFooter(screen);
+  const footer=renderFooter();
+  if(footer) screen.appendChild(footer);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -306,7 +324,8 @@ function renderDescriptionStage(){
   const stage=document.getElementById('stage-description');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  renderDescription(screen);
+  const desc=renderDescription();
+  if(desc) screen.appendChild(desc);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -315,7 +334,8 @@ function renderCardsStage(){
   const stage=document.getElementById('stage-cards');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  renderCards(screen);
+  const cards=renderCards();
+  if(cards) screen.appendChild(cards);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
