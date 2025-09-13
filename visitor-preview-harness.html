@@ -271,8 +271,8 @@ function renderFooter(){
 function fitStage(stage){
   const screen=stage.querySelector('.screen');
   if(!screen) return;
-  const width=screen.offsetWidth;
-  const height=screen.offsetHeight;
+  const width=1440;
+  const height=810;
   const scale=Math.min(stage.clientWidth/width, stage.clientHeight/height);
   screen.style.transform=`scale(${scale})`;
   screen.style.transformOrigin='top left';
