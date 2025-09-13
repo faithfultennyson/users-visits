@@ -43,9 +43,17 @@
 
     /* Card */
     --card-bg: #1e1e1e;
-    --card-title-size: clamp(0.9rem, 2vw, 1.2rem);
-    --card-title-weight: 600;
+    --header-font-size: 1.7rem;
+    --header-font-weight: 600;
+    --desc-title-size: 1.2rem;
+    --desc-title-weight: 800;
+    --desc-body-size: 1rem;
+    --desc-body-weight: 400;
+    --card-title-size: 1rem;
+    --card-title-weight: 800;
     --card-title-lines: 2;
+    --footer-font-size: 0.95rem;
+    --footer-font-weight: 500;
     --card-bevel: 10px;
     --rim: rgba(255, 255, 255, 0.5);
 
@@ -53,6 +61,11 @@
     --text: rgba(255, 255, 255, 0.9);
     --text-muted: rgba(255, 255, 255, 0.6);
     --accent: var(--brand-primary);
+    --header-text-color: #FFFFFF;
+    --desc-title-color: #26C6DA;
+    --desc-body-color: #FFFFFF;
+    --card-title-color: #FFFFFF;
+
 
     /* Misc */
     --logo-size: 64px;
@@ -79,7 +92,7 @@ h1, h2, h3, h4, h5, h6 {font-family: var(--font-heading);}
 
 /* ===== base layout ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
-html{font-size:clamp(8px,1.2vw,16px);}
+html{font-size:16px;}
 body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:100vh;display:flex;flex-direction:column;}
 
 /* harness controls */
@@ -93,7 +106,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 
 /* canvas / stage */
 .stage{position:relative;width:100%;aspect-ratio:16/9;border:1px solid #555;overflow:hidden;}
-.stage .screen{position:absolute;top:0;left:0;display:flex;flex-direction:column;min-height:100%;}
+.stage .screen{position:absolute;top:0;left:0;display:flex;flex-direction:column;width:1440px;height:810px;overflow:hidden;}
 .surface{width:100%;}
 .checkerboard{background-size:20px 20px;background-position:0 0,10px 10px;background-image:linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666),linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666);}
 
@@ -102,37 +115,37 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 .header-content{max-width:var(--grid-max);height:var(--hdr-h);margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:1rem;}
 .branding{display:flex;align-items:center;gap:1rem;}
 #logo{width:var(--logo-size);height:var(--logo-size);border-radius:12px;object-fit:cover;}
-#handle{font-size:clamp(2rem,4vw,2.25rem);font-weight:600;}
+#handle{font-size:var(--header-font-size);font-weight:var(--header-font-weight);color:var(--header-text-color);}
 .header-links{display:flex;align-items:center;gap:1rem;}
-.header-links a{display:flex;align-items:center;color:var(--text);text-decoration:none;}
+.header-links a{display:flex;align-items:center;color:var(--header-text-color);text-decoration:none;}
 .header-links img{width:clamp(24px,6vw,32px);height:clamp(24px,6vw,32px);}
 #hamburger{padding:1rem;margin-left:1rem;background:none;border:none;color:var(--text);cursor:pointer;font-size:clamp(2rem,8vw,2.5rem);}
 
 /* description */
-.description{max-width:var(--description-max-width);margin:var(--description-margin);padding:clamp(1rem,5vw,2rem);border-radius:var(--description-border-radius);color:white;position:relative;z-index:200;}
+.description{max-width:var(--description-max-width);margin:var(--description-margin);padding:1rem;border-radius:var(--description-border-radius);color:white;position:relative;z-index:200;}
 .description > * {max-width:var(--description-content-max);margin-left:auto;margin-right:auto;}
-.description h1{font-size:clamp(1.2rem,5vw,2rem);margin-bottom:1rem;font-weight:800;}
-.description p{font-size:clamp(0.9rem,3vw,1.1rem);opacity:0.9;max-width:var(--description-p-max);margin:0 auto;}
+.description h1{font-size:var(--desc-title-size);font-weight:var(--desc-title-weight);margin-bottom:1rem;color:var(--desc-title-color);}
+.description p{font-size:var(--desc-body-size);font-weight:var(--desc-body-weight);opacity:0.9;max-width:var(--description-p-max);margin:0 auto;color:var(--desc-body-color);}
 .description.style-1{background:var(--creator-gradient);border:var(--description-border);}
 .description.align-center{text-align:center;}
 .description .create-link{display:inline-block;margin-top:1rem;color:var(--brand-text);text-decoration:none;font-size:0.9rem;opacity:0.8;transition:opacity 0.2s ease;}
 .description .create-link:hover{opacity:1;}
 
 /* grid & cards */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);max-width:var(--grid-max);width:100%;margin:0 auto;padding:clamp(16px,4vw,24px);box-sizing:border-box;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);max-width:var(--grid-max);width:100%;margin:0 auto;padding:16px;box-sizing:border-box;}
 .card{display:flex;flex-direction:column;text-decoration:none;color:inherit;border-radius:var(--creator-card-radius);overflow:hidden;background:var(--card-bg);box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:transform 0.2s ease,box-shadow 0.2s ease;position:relative;}
 .card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.4);}
 .card:active{box-shadow:0 0 0 2px var(--rim) inset;}
 .thumb-wrap{position:relative;width:100%;aspect-ratio:742/960;overflow:hidden;}
-.thumb-wrap .ph,.thumb-wrap .thumb{position:absolute;inset:0;}
-.thumb-wrap .ph svg{width:100%;height:100%;display:block;}
-.thumb-wrap .thumb{width:100%;height:100%;object-fit:cover;z-index:1;}
+.thumb{width:100%;height:100%;object-fit:cover;}
 .card-footer{padding:12px;background:var(--card-bg);}
-.title{margin:0;font-size:var(--card-title-size);font-weight:var(--card-title-weight);line-height:1.35;display:-webkit-box;-webkit-line-clamp:var(--card-title-lines);-webkit-box-orient:vertical;overflow:hidden;min-height:calc(var(--card-title-lines)*1.35em);max-height:calc(var(--card-title-lines)*1.35em);}
+.title{margin:0;font-size:var(--card-title-size);font-weight:var(--card-title-weight);line-height:1.35;display:-webkit-box;-webkit-line-clamp:var(--card-title-lines);-webkit-box-orient:vertical;overflow:hidden;min-height:calc(var(--card-title-lines)*1.35em);max-height:calc(var(--card-title-lines)*1.35em);color:var(--card-title-color);}
 .icon-btn.dot-btn{position:absolute;top:0.5rem;right:0.5rem;width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,0.5);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;z-index:5;}
-.icon-btn:hover{transform:scale(1.1);}
 .copy-feedback{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);background:rgba(0,0,0,0.85);color:white;padding:0.5rem 1rem;border-radius:8px;font-size:0.9rem;pointer-events:none;opacity:0;transition:all 0.3s ease;}
 .copy-feedback.visible{opacity:1;transform:translate(-50%,-50%) scale(1);}
+
+/* background video */
+.video-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;pointer-events:none;}
 
 /* footer */
 .footer{margin-top:auto;padding:var(--footer-padding-y) max(1rem, calc((100% - var(--grid-max)) / 2));background:var(--footer-bg);backdrop-filter:blur(var(--footer-blur));-webkit-backdrop-filter:blur(var(--footer-blur));border-top:1px solid var(--footer-bd);text-align:center;}
@@ -140,71 +153,150 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 .footer-links a{text-decoration:none;}
 .footer-links img{width:var(--footer-icon-size);height:var(--footer-icon-size);transition:transform 0.2s;}
 .footer-links a:hover img{transform:scale(1.1);}
-.footer-legal{display:flex;justify-content:center;gap:2rem;font-size:var(--footer-font-size,0.95rem);font-weight:var(--footer-font-weight,500);}
+.footer-legal{display:flex;justify-content:center;gap:2rem;font-size:var(--footer-font-size);font-weight:var(--footer-font-weight);}
 .footer-legal a{color:var(--footer-link-color);text-decoration:none;}
 .copyright{color:var(--text-muted);font-size:0.8rem;padding-bottom:0.5rem;}
 </style>
 <script>
 const config = {
   profile: {
-    handle: "Take_Down",
-    assets: {
-      favicon: { png32: "./assets/logo.png" },
-      social_image: "./assets/og/default-og.png"
+    "handle": "Take_Down",
+    "brand": {
+      "primary": "#26C6DA",
+      "secondary": "#4361EE",
+      "tertiary": "#3A0CA3",
+      "text": "#121212"
     },
-    colors: {
-      page_bg: "#121212",
-      gradient: "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
+    "assets": {
+      "favicon": {
+        "png16": "/assets/logo.png",
+        "png32": "/assets/logo.png",
+        "apple": "/assets/logo.png",
+        "svg": null
+      },
+      "social_image": "/assets/og/default-og.png"
     },
-    cards: { radius_px: 18 },
-    description: {
-      visible: true,
-      sticky: false,
-      width: "mid",
-      title: "Welcome to my creative space",
-      body: "Explore my latest content from Instagram and TikTok. Feel free to browse through my curated collection of posts and connect with me on various social platforms",
-      marketing_link: { show: true, text: "Create your own creative space" }
+    "colors": {
+      "page_bg": "#121212",
+      "accent": "#26C6DA",
+      "gradient": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))",
+      "header_text": "#FFFFFF",
+      "desc_title_text": "#26C6DA",
+      "desc_body_text": "#FFFFFF",
+      "card_title_text": "#FFFFFF",
+      "footer_text": "#CCCCCC",
+      "card_bg": "#121212",
+      "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
+    },
+    "cards": { "shape": "round", "radius_px": 18, "bevel_px": 10 },
+    "fonts": {
+      "primary": { "family": "'Bebas Neue', sans-serif", "weights": ["400"], "css_url": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" },
+      "heading": { "family": "'Merriweather', serif", "weights": ["400", "700"], "css_url": "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" }
+    },
+    "surfaces": {
+      "background": { "mode": "gradient", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.0, "blur_px": 0 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
+      "header": { "mode": "gradient", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.10, "blur_px": 15 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
+      "footer": { "mode": "gradient", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" }, "glass": { "opacity": 0.20, "blur_px": 15 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
+      "desc_band": { "mode": "solid", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" }, "glass": { "opacity": 0.8, "blur_px": 35 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } }
+    },
+    "sizes": { "header_height_px": 94, "footer_padding_y_px": 52, "logo_px": 64 },
+    "typography": {
+      "header_rem": 1.70,
+      "header_weight": 600,
+      "desc_title_rem": 1.20,
+      "desc_title_weight": 800,
+      "desc_body_rem": 1.00,
+      "desc_body_weight": 400,
+      "card_title_rem": 1.00,
+      "card_title_weight": 800,
+      "footer_rem": 0.95,
+      "footer_weight": 500
+    },
+    "clamp": { "tiny_desc_lines": 1, "desc_body_lines": 3, "card_title_lines": 2 },
+    "layout": { "header_quick_alignment": "right", "description_align": "center" },
+    "description": {
+      "visible": true,
+      "sticky": true,
+      "width": "mid",
+      "title": "Welcome to my creative space",
+      "body": "Explore my latest content from Instagram and TikTok. Feel free to browse through my curated collection of posts and connect with me on various social platforms",
+      "marketing_link": { "show": true, "text": "Create your own creative space" }
     }
   },
   links: {
-    icons: { base_path: "./assets/icons/" },
-    header: {
-      quick: [
-        { icon: "social-instagram_icon", href: "https://instagram.com/your", aria: "Instagram" },
-        { icon: "social-tiktok_icon", href: "https://tiktok.com/@your", aria: "TikTok" },
-        { icon: "web_icon", href: "https://esegames.com", aria: "Esegames" }
+    "icons": { "base_path": "/assets/icons/" },
+    "profile-image": { "base_path": "/assets/profile-image/", "logo": "logo" },
+    "header": {
+      "quick": [
+        { "icon": "social-instagram_icon", "href": "https://instagram.com/your", "aria": "Instagram" },
+        { "icon": "social-tiktok_icon", "href": "https://tiktok.com/@your", "aria": "TikTok" },
+        { "icon": "web_icon", "href": "https://esegames.com", "aria": "Esegames" }
+      ],
+      "overflow": [
+        { "icon": "mail_icon", "href": "mailto:hello@yoursite.com", "title": "Email", "aria": "Email" },
+        { "icon": "phone_icon", "href": "tel:+2348000000000", "title": "Call", "aria": "Phone" },
+        { "icon": "social-discord_icon", "href": "https://discord.gg/abc", "title": "Discord", "aria": "Discord" },
+        { "icon": "social-linkedin_icon", "href": "https://linkedin.com/in/you", "title": "LinkedIn", "aria": "LinkedIn" },
+        { "icon": "social-youtube_icon", "href": "https://youtube.com/your", "title": "YouTube", "aria": "YouTube" },
+        { "icon": "social-x_icon", "href": "https://twitter.com/your", "title": "Twitter/X", "aria": "Twitter" },
+        { "icon": "social-facebook_icon", "href": "https://facebook.com/your", "title": "Facebook", "aria": "Facebook" },
+        { "icon": "social-pinterest_icon", "href": "https://pinterest.com/your", "title": "Pinterest", "aria": "Pinterest" },
+        { "icon": "social-github_icon", "href": "https://github.com", "title": "GitHub", "aria": "GitHub" }
       ]
     },
-    footer: {
-      visible: true,
-      icons: [
-        { icon: "social-whatsapp_icon", href: "https://wa.me/...", aria: "WhatsApp" },
-        { icon: "social-instagram_icon", href: "https://instagram.com/...", aria: "Instagram" },
-        { icon: "social-tiktok_icon", href: "https://tiktok.com/@...", aria: "TikTok" },
-        { icon: "social-youtube_icon", href: "https://youtube.com/...", aria: "YouTube" },
-        { icon: "social-linkedin_icon", href: "https://linkedin.com/...", aria: "LinkedIn" }
+    "footer": {
+      "visible": true,
+      "icons": [
+        { "icon": "social-whatsapp_icon", "href": "https://wa.me/...", "aria": "WhatsApp" },
+        { "icon": "social-instagram_icon", "href": "https://instagram.com/...", "aria": "Instagram" },
+        { "icon": "social-tiktok_icon", "href": "https://tiktok.com/@...", "aria": "TikTok" },
+        { "icon": "social-youtube_icon", "href": "https://youtube.com/...", "aria": "YouTube" },
+        { "icon": "social-linkedin_icon", "href": "https://linkedin.com/...", "aria": "LinkedIn" }
       ],
-      text_links: [
-        { label: "Privacy Policy", href: "/privacy", fixed: true },
-        { label: "Create Account", href: "/signup", show: false }
+      "text_links": [
+        { "label": "Privacy Policy", "href": "/privacy", "fixed": true },
+        { "label": "Create Account", "href": "/signup", "show": false }
       ],
-      disclaimer: "All logos are property of their respective owners."
-
+      "disclaimer": "All logos are property of their respective owners."
     }
   }
 };
 
 function applyTheme(){
-  document.documentElement.style.setProperty('--creator-card-radius', config.profile.cards.radius_px + 'px');
-  document.documentElement.style.setProperty('--creator-bg', config.profile.colors.page_bg);
-  document.documentElement.style.setProperty('--creator-gradient', config.profile.colors.gradient);
+  const root=document.documentElement;
+  const p=config.profile;
+  root.style.setProperty('--creator-card-radius', p.cards.radius_px + 'px');
+  root.style.setProperty('--creator-bg', p.colors.page_bg);
+  root.style.setProperty('--creator-gradient', p.colors.gradient);
+  root.style.setProperty('--card-bg', p.colors.card_bg);
+  root.style.setProperty('--header-text-color', p.colors.header_text);
+  root.style.setProperty('--desc-title-color', p.colors.desc_title_text);
+  root.style.setProperty('--desc-body-color', p.colors.desc_body_text);
+  root.style.setProperty('--card-title-color', p.colors.card_title_text);
+  root.style.setProperty('--footer-link-color', p.colors.footer_text);
+  root.style.setProperty('--font-body', p.fonts.primary.family);
+  root.style.setProperty('--font-heading', p.fonts.heading.family);
+  root.style.setProperty('--card-title-lines', p.clamp.card_title_lines);
+  root.style.setProperty('--header-font-size', p.typography.header_rem + 'rem');
+  root.style.setProperty('--header-font-weight', p.typography.header_weight);
+  root.style.setProperty('--desc-title-size', p.typography.desc_title_rem + 'rem');
+  root.style.setProperty('--desc-title-weight', p.typography.desc_title_weight);
+  root.style.setProperty('--desc-body-size', p.typography.desc_body_rem + 'rem');
+  root.style.setProperty('--desc-body-weight', p.typography.desc_body_weight);
+  root.style.setProperty('--card-title-size', p.typography.card_title_rem + 'rem');
+  root.style.setProperty('--card-title-weight', p.typography.card_title_weight);
+  root.style.setProperty('--footer-font-size', p.typography.footer_rem + 'rem');
+  root.style.setProperty('--footer-font-weight', p.typography.footer_weight);
+  root.style.setProperty('--hdr-h', p.sizes.header_height_px + 'px');
+  root.style.setProperty('--footer-padding-y', p.sizes.footer_padding_y_px + 'px');
+  root.style.setProperty('--logo-size', p.sizes.logo_px + 'px');
 }
 
 function createEl(tag, cls){const el=document.createElement(tag);if(cls)el.className=cls;return el;}
 
-function renderHeader(){
-  const surface=createEl('div','surface');
-  const header=createEl('header','header h1');
+function renderHeader(parent){
+  const wrap=createEl('div','surface');
+  const header=createEl('header','header');
   const content=createEl('div','header-content');
   const branding=createEl('div','branding');
   const logo=document.createElement('img');logo.id='logo';logo.src=config.profile.assets.favicon.png32;logo.alt='';
@@ -216,47 +308,53 @@ function renderHeader(){
     const img=document.createElement('img');img.src=config.links.icons.base_path+link.icon+'.svg';img.alt=link.aria;
     a.appendChild(img);nav.appendChild(a);
   });
+  if(config.profile.layout.header_quick_alignment){
+    const align=config.profile.layout.header_quick_alignment;
+    nav.style.justifySelf=align==='left'?'start':align==='center'?'center':'end';
+  }
   const hamburger=document.createElement('button');hamburger.id='hamburger';hamburger.setAttribute('aria-label','Menu');hamburger.textContent='☰';
-  content.append(branding,nav,hamburger);
-  header.appendChild(content);
-  surface.appendChild(header);
-  return surface;
+  content.append(branding,nav,hamburger);header.appendChild(content);wrap.appendChild(header);parent.appendChild(wrap);
 }
 
-function renderDescription(){
-  if(!config.profile.description.visible) return null;
-  const surface=createEl('div','surface');
-  const d=createEl('div','description style-1 align-center');
+function renderDescription(parent){
+  if(!config.profile.description.visible) return;
+  const wrap=createEl('div','surface');
+  const d=createEl('div','description style-1 align-' + config.profile.layout.description_align);
   d.setAttribute('data-sticky', config.profile.description.sticky);
   const h1=createEl('h1');h1.textContent=config.profile.description.title;d.appendChild(h1);
   const p=createEl('p');p.textContent=config.profile.description.body;d.appendChild(p);
   if(config.profile.description.marketing_link.show){
     const a=document.createElement('a');a.href='/signup';a.className='create-link';const em=document.createElement('em');em.textContent=config.profile.description.marketing_link.text;a.appendChild(em);d.appendChild(a);
   }
-  surface.appendChild(d);
-  return surface;
+  wrap.appendChild(d);parent.appendChild(wrap);
 }
 
-function renderCards(){
-  const surface=createEl('div','surface');
+function renderCards(parent){
+  const wrap=createEl('div','surface');
   const main=createEl('main','grid');
-  for(let i=1;i<=4;i++){
+  const titles=[
+    'Card one title example that wraps',
+    'Card two title example that wraps',
+    'Card three title example that wraps',
+    'Card four title example that wraps'
+  ];
+  for(let i=0;i<4;i++){
     const card=createEl('a','card');card.href='#';card.target='_blank';
     const tw=createEl('div','thumb-wrap');
     const img=createEl('img','thumb');img.src=config.profile.assets.social_image;img.alt='';
     tw.appendChild(img);card.appendChild(tw);
     const btn=createEl('button','icon-btn dot-btn');btn.type='button';btn.textContent='⋯';card.appendChild(btn);
-    const footer=createEl('div','card-footer');const h3=createEl('h3','title');h3.textContent='Card '+i;footer.appendChild(h3);card.appendChild(footer);
+
+    const footer=createEl('div','card-footer');const h3=createEl('h3','title');h3.textContent=titles[i];footer.appendChild(h3);card.appendChild(footer);
     const fb=createEl('div','copy-feedback');fb.textContent='Link copied!';card.appendChild(fb);
     main.appendChild(card);
   }
-  surface.appendChild(main);
-  return surface;
+  wrap.appendChild(main);parent.appendChild(wrap);
 }
 
-function renderFooter(){
-  if(!config.links.footer.visible) return null;
-  const surface=createEl('div','surface');
+function renderFooter(parent){
+  if(!config.links.footer.visible) return;
+  const wrap=createEl('div','surface');
   const footer=createEl('footer','footer');
   const icons=createEl('div','footer-links');
   config.links.footer.icons.forEach(link=>{
@@ -266,9 +364,7 @@ function renderFooter(){
   const text=createEl('div','footer-legal');
   config.links.footer.text_links.forEach(t=>{if(t.show===false)return;const a=document.createElement('a');a.href=t.href;a.textContent=t.label;text.appendChild(a);});
   const copy=createEl('div','copyright');copy.textContent=config.links.footer.disclaimer;
-  footer.append(icons,text,copy);
-  surface.appendChild(footer);
-  return surface;
+  footer.append(icons,text,copy);wrap.appendChild(footer);parent.appendChild(wrap);
 }
 
 function fitStage(stage){
@@ -283,7 +379,6 @@ function fitStage(stage){
   const offsetY=(stage.clientHeight - height*scale)/2;
   screen.style.left=offsetX+'px';
   screen.style.top=offsetY+'px';
-
 }
 
 function renderAll(){
@@ -291,14 +386,19 @@ function renderAll(){
   const stage=document.getElementById('stage-all');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  const header=renderHeader();
-  if(header) screen.appendChild(header);
-  const desc=renderDescription();
-  if(desc) screen.appendChild(desc);
-  const cards=renderCards();
-  if(cards) screen.appendChild(cards);
-  const footer=renderFooter();
-  if(footer) screen.appendChild(footer);
+  const bg=config.profile.surfaces.background;
+  if(bg){
+    if(bg.mode==='gradient') screen.style.background=config.profile.colors.gradient;
+    else if(bg.mode==='solid') screen.style.background=config.profile.colors.page_bg;
+    else if(bg.mode==='image' && bg.image && bg.image.url) screen.style.background=`url(${bg.image.url}) center/cover no-repeat`;
+    else if(bg.mode==='video' && bg.video && bg.video.url){
+      const vid=createEl('video','video-bg');vid.src=bg.video.url;vid.autoplay=true;vid.muted=true;vid.loop=true;screen.appendChild(vid);
+    } else screen.style.background=config.profile.colors.page_bg;
+  }
+  renderHeader(screen);
+  renderDescription(screen);
+  renderCards(screen);
+  renderFooter(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -307,8 +407,8 @@ function renderHeaderStage(){
   const stage=document.getElementById('stage-header');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  const header=renderHeader();
-  if(header) screen.appendChild(header);
+
+  renderHeader(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -317,8 +417,8 @@ function renderFooterStage(){
   const stage=document.getElementById('stage-footer');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  const footer=renderFooter();
-  if(footer) screen.appendChild(footer);
+
+  renderFooter(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -327,8 +427,7 @@ function renderDescriptionStage(){
   const stage=document.getElementById('stage-description');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  const desc=renderDescription();
-  if(desc) screen.appendChild(desc);
+  renderDescription(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
@@ -337,19 +436,26 @@ function renderCardsStage(){
   const stage=document.getElementById('stage-cards');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  const cards=renderCards();
-  if(cards) screen.appendChild(cards);
+
+  renderCards(screen);
   stage.appendChild(screen);
   requestAnimationFrame(()=>fitStage(stage));
 }
 
 function renderBackgroundStage(){
-  const bg=document.getElementById('stage-background');
-  if(config.profile.surfaces && config.profile.surfaces.background && config.profile.surfaces.background.mode==='gradient'){
-    bg.style.background=config.profile.colors.gradient;
-  } else {
-    bg.style.background=config.profile.colors.page_bg;
+  const stage=document.getElementById('stage-background');
+  stage.innerHTML='';
+  const screen=createEl('div','screen');
+  const bg=config.profile.surfaces.background;
+  if(bg){
+    if(bg.mode==='gradient') screen.style.background=config.profile.colors.gradient;
+    else if(bg.mode==='solid') screen.style.background=config.profile.colors.page_bg;
+    else if(bg.mode==='image' && bg.image && bg.image.url) screen.style.background=`url(${bg.image.url}) center/cover no-repeat`;
+    else if(bg.mode==='video' && bg.video && bg.video.url){ const vid=createEl('video','video-bg');vid.src=bg.video.url;vid.autoplay=true;vid.muted=true;vid.loop=true;screen.appendChild(vid); }
+    else screen.style.background=config.profile.colors.page_bg;
   }
+  stage.appendChild(screen);
+  requestAnimationFrame(()=>fitStage(stage));
 }
 
 function initTabs(){
