@@ -66,7 +66,6 @@
     --desc-body-color: #FFFFFF;
     --card-title-color: #FFFFFF;
 
-
     /* Misc */
     --logo-size: 64px;
     --modal-bg: var(--creator-bg);
@@ -106,7 +105,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 
 /* canvas / stage */
 .stage{position:relative;width:100%;aspect-ratio:16/9;border:1px solid #555;overflow:hidden;}
-.stage .screen{position:absolute;top:0;left:0;display:flex;flex-direction:column;width:1440px;height:810px;overflow:hidden;}
+.stage .screen{position:absolute;top:0;left:0;display:flex;flex-direction:column;width:1440px;}
 .surface{width:100%;}
 .checkerboard{background-size:20px 20px;background-position:0 0,10px 10px;background-image:linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666),linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666);}
 
@@ -132,7 +131,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 .description .create-link:hover{opacity:1;}
 
 /* grid & cards */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);max-width:960px;width:100%;margin:0 auto;padding:calc(var(--gap)*2);box-sizing:border-box;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);max-width:var(--grid-max);width:100%;margin:0 auto;padding:calc(var(--gap)*2);box-sizing:border-box;}
 .card{display:flex;flex-direction:column;text-decoration:none;color:inherit;border-radius:var(--creator-card-radius);overflow:hidden;background:var(--card-bg);box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:transform 0.2s ease,box-shadow 0.2s ease;position:relative;}
 .card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.4);}
 .card:active{box-shadow:0 0 0 2px var(--rim) inset;}
@@ -298,9 +297,9 @@ function applyTheme(){
   let pMax    = '600px';
   let margin  = 'var(--gap) auto';
   if (widthMode === 'mid') {
-    bandMax = `max(${SHORT}, min(90vw, var(--grid-max)))`;
-    boxMax  = 'min(70vw, var(--grid-max))';
-    pMax    = '70%';
+    bandMax = 'min(960px, 90vw)';
+    boxMax  = 'min(720px, 90vw)';
+    pMax    = 'min(600px, 80vw)';
   }
   if (widthMode === 'full') {
     bandMax = '100vw';
@@ -317,33 +316,26 @@ function applyTheme(){
 function createEl(tag, cls){const el=document.createElement(tag);if(cls)el.className=cls;return el;}
 
 function applySurface(el, surf, fallback){
-  if(!surf){
-    if(fallback) el.style.background=fallback;
-    return;
-  }
-  let base=fallback||'';
-  if(surf.mode==='gradient') base=config.profile.colors.gradient;
-  else if(surf.mode==='solid') base=config.profile.colors.page_bg;
-  else if(surf.mode==='image' && surf.image && surf.image.url) base=`url(${surf.image.url}) center/cover no-repeat`;
+  el.style.background = fallback || '';
+  if(!surf) return;
+  const layers=[];
+  if(surf.mode==='gradient') layers.push(config.profile.colors.gradient);
+  else if(surf.mode==='solid') layers.push(config.profile.colors.page_bg);
+  else if(surf.mode==='image' && surf.image && surf.image.url) layers.push(`url(${surf.image.url}) center/cover no-repeat`);
   else if(surf.mode==='video' && surf.video && surf.video.url){
     const vid=createEl('video','video-bg');
     vid.src=surf.video.url;vid.autoplay=true;vid.muted=true;vid.loop=true;
     el.appendChild(vid);
-    base=fallback||'';
-  } else if(surf.mode==='glass') base='transparent';
-
-  const overlay=surf.glass?`rgba(255,255,255,${surf.glass.opacity||0})`:'';
-  if(overlay && base) el.style.background=`${overlay}, ${base}`;
-  else if(base) el.style.background=base;
-  else if(overlay) el.style.background=overlay;
-
-  if(surf.glass){
+  }
+  if(surf.glass && surf.glass.opacity>0){
+    layers.unshift(`rgba(255,255,255,${surf.glass.opacity})`);
     el.style.backdropFilter=`blur(${surf.glass.blur_px||0}px)`;
     el.style.webkitBackdropFilter=`blur(${surf.glass.blur_px||0}px)`;
   } else {
     el.style.backdropFilter='';
     el.style.webkitBackdropFilter='';
   }
+  if(layers.length) el.style.background=layers.join(', ');
 }
 
 function renderHeader(parent){
@@ -425,7 +417,7 @@ function fitStage(stage){
   const screen=stage.querySelector('.screen');
   if(!screen) return;
   const width=1440;
-  const height=810;
+  const height=screen.offsetHeight;
   const scale=Math.min(stage.clientWidth/width, stage.clientHeight/height);
   screen.style.transform=`scale(${scale})`;
   screen.style.transformOrigin='top left';
@@ -450,6 +442,7 @@ function renderAll(){
 }
 
 function renderHeaderStage(){
+  applyTheme();
   const stage=document.getElementById('stage-header');
   stage.innerHTML='';
   const screen=createEl('div','screen');
@@ -459,6 +452,7 @@ function renderHeaderStage(){
 }
 
 function renderFooterStage(){
+  applyTheme();
   const stage=document.getElementById('stage-footer');
   stage.innerHTML='';
   const screen=createEl('div','screen');
@@ -468,6 +462,7 @@ function renderFooterStage(){
 }
 
 function renderDescriptionStage(){
+  applyTheme();
   const stage=document.getElementById('stage-description');
   stage.innerHTML='';
   const screen=createEl('div','screen');
@@ -477,6 +472,7 @@ function renderDescriptionStage(){
 }
 
 function renderCardsStage(){
+  applyTheme();
   const stage=document.getElementById('stage-cards');
   stage.innerHTML='';
   const screen=createEl('div','screen');
@@ -486,6 +482,7 @@ function renderCardsStage(){
 }
 
 function renderBackgroundStage(){
+  applyTheme();
   const stage=document.getElementById('stage-background');
   stage.innerHTML='';
   const screen=createEl('div','screen');
