@@ -162,7 +162,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 <script>
 const config = {
   profile: {
-    "handle": "your-Guy Never sleep Ohhh",
+    "handle": "Take_Down",
     "brand": {
       "primary": "#26C6DA",
       "secondary": "#4361EE",
@@ -190,24 +190,18 @@ const config = {
       "card_bg": "#121212",
       "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
     },
-    "cards": { "shape": "blocky", "radius_px": 18, "bevel_px": 10 },
+    "cards": { "shape": "round", "radius_px": 18, "bevel_px": 10 },
     "fonts": {
-      "body_url": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap",
-      "heading_url": "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap",
-      "body_family": "'Bebas Neue', sans-serif",
-      "heading_family": "'Merriweather', serif"
+      "primary": { "family": "'Bebas Neue', sans-serif", "weights": ["400"], "css_url": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" },
+      "heading": { "family": "'Merriweather', serif", "weights": ["400", "700"], "css_url": "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" }
     },
     "surfaces": {
-      "background": { "mode": "video", "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
-      "header":     { "mode": "glass", "video": { "url": "/assets/videos/video.webm", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.20, "blur_px": 15 } },
-      "footer":     { "mode": "glass", "image": { "url": null }, "glass": { "opacity": 0.2, "blur_px": 15 } },
-      "desc_band":  { "mode": "glass", "video": { "url": "/assets/videos/video.webm", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.20, "blur_px": 15 } }
+      "background": { "mode": "video", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.0, "blur_px": 0 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
+      "header": { "mode": "video", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.10, "blur_px": 15 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
+      "footer": { "mode": "video", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" }, "glass": { "opacity": 0.20, "blur_px": 15 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
+      "desc_band": { "mode": "video", "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" }, "glass": { "opacity": 0.8, "blur_px": 35 }, "video": { "url": "/assets/videos/video.webm", "fit": "cover" } }
     },
-    "sizes": {
-      "header_height_px": 94,
-      "footer_padding_y_px": 52,
-      "logo_px": 64
-    },
+    "sizes": { "header_height_px": 94, "footer_padding_y_px": 52, "logo_px": 54 },
     "typography": {
       "header_rem": 1.70,
       "header_weight": 600,
@@ -220,25 +214,15 @@ const config = {
       "footer_rem": 0.95,
       "footer_weight": 500
     },
-    "clamp": {
-      "tiny_desc_lines": 1,
-      "desc_body_lines": 3,
-      "card_title_lines": 2
-    },
-    "layout": {
-      "header_quick_alignment": "right",
-      "description_align": "center"
-    },
+    "clamp": { "tiny_desc_lines": 1, "desc_body_lines": 3, "card_title_lines": 2 },
+    "layout": { "header_quick_alignment": "right", "description_align": "center" },
     "description": {
       "visible": true,
       "sticky": true,
-      "width": "mid",
+      "width": "short",
       "title": "Welcome to my creative space",
       "body": "Explore my latest content from Instagram and TikTok. Feel free to browse through my curated collection of posts and connect with me on various social platforms",
-      "marketing_link": {
-        "show": true,
-        "text": "Create your own creative space"
-      }
+      "marketing_link": { "show": false, "text": "Create your own creative space" }
     }
   },
   links: {
@@ -247,33 +231,33 @@ const config = {
     "header": {
       "quick": [
         { "icon": "social-instagram_icon", "href": "https://instagram.com/your", "aria": "Instagram" },
-        { "icon": "social-tiktok_icon",    "href": "https://tiktok.com/@your",   "aria": "TikTok" },
-        { "icon": "web_icon",              "href": "https://esegames.com",       "aria": "Esegames" }
+        { "icon": "social-tiktok_icon", "href": "https://tiktok.com/@your", "aria": "TikTok" },
+        { "icon": "web_icon", "href": "https://esegames.com", "aria": "Esegames" }
       ],
       "overflow": [
-        { "icon": "mail_icon",            "href": "mailto:hello@yoursite.com", "title": "Email",  "aria": "Email" },
-        { "icon": "phone_icon",           "href": "tel:+2348000000000",        "title": "Call",   "aria": "Phone" },
-        { "icon": "social-discord_icon",  "href": "https://discord.gg/abc",    "title": "Discord","aria": "Discord" },
-        { "icon": "social-linkedin_icon", "href": "https://linkedin.com/in/you", "title": "LinkedIn","aria": "LinkedIn" },
-        { "icon": "social-youtube_icon",  "href": "https://youtube.com/your",   "title": "YouTube","aria": "YouTube" },
-        { "icon": "social-x_icon",        "href": "https://twitter.com/your",   "title": "Twitter/X","aria": "Twitter" },
-        { "icon": "social-facebook_icon", "href": "https://facebook.com/your",   "title": "Facebook","aria": "Facebook" },
-        { "icon": "social-pinterest_icon","href": "https://pinterest.com/your",  "title": "Pinterest","aria": "Pinterest" },
-        { "icon": "social-github_icon",   "href": "https://github.com",           "title": "GitHub",  "aria": "GitHub" }
+        { "icon": "mail_icon", "href": "mailto:hello@yoursite.com", "title": "Email", "aria": "Email" },
+        { "icon": "phone_icon", "href": "tel:+2348000000000", "title": "Call", "aria": "Phone" },
+        { "icon": "social-discord_icon", "href": "https://discord.gg/abc", "title": "Discord", "aria": "Discord" },
+        { "icon": "social-linkedin_icon", "href": "https://linkedin.com/in/you", "title": "LinkedIn", "aria": "LinkedIn" },
+        { "icon": "social-youtube_icon", "href": "https://youtube.com/your", "title": "YouTube", "aria": "YouTube" },
+        { "icon": "social-x_icon", "href": "https://twitter.com/your", "title": "Twitter/X", "aria": "Twitter" },
+        { "icon": "social-facebook_icon", "href": "https://facebook.com/your", "title": "Facebook", "aria": "Facebook" },
+        { "icon": "social-pinterest_icon", "href": "https://pinterest.com/your", "title": "Pinterest", "aria": "Pinterest" },
+        { "icon": "social-github_icon", "href": "https://github.com", "title": "GitHub", "aria": "GitHub" }
       ]
     },
     "footer": {
       "visible": true,
       "icons": [
-        { "icon": "social-whatsapp_icon",  "href": "https://wa.me/...",          "aria": "WhatsApp" },
-        { "icon": "social-instagram_icon", "href": "https://instagram.com/...",  "aria": "Instagram" },
-        { "icon": "social-tiktok_icon",    "href": "https://tiktok.com/@...",    "aria": "TikTok" },
-        { "icon": "social-youtube_icon",   "href": "https://youtube.com/...",    "aria": "YouTube" },
-        { "icon": "social-linkedin_icon",  "href": "https://linkedin.com/...",   "aria": "LinkedIn" }
+        { "icon": "social-whatsapp_icon", "href": "https://wa.me/...", "aria": "WhatsApp" },
+        { "icon": "social-instagram_icon", "href": "https://instagram.com/...", "aria": "Instagram" },
+        { "icon": "social-tiktok_icon", "href": "https://tiktok.com/@...", "aria": "TikTok" },
+        { "icon": "social-youtube_icon", "href": "https://youtube.com/...", "aria": "YouTube" },
+        { "icon": "social-linkedin_icon", "href": "https://linkedin.com/...", "aria": "LinkedIn" }
       ],
       "text_links": [
         { "label": "Privacy Policy", "href": "/privacy", "fixed": true },
-        { "label": "Create Account", "href": "/signup",  "show": false }
+        { "label": "Create Account", "href": "/signup", "show": false }
       ],
       "disclaimer": "All logos are property of their respective owners."
     },
@@ -284,19 +268,7 @@ const config = {
       { "title": "Card four title example that wraps", "href": "https://example.com/4", "image": "/assets/og/default-og.png" }
     ]
   }
-}
-
 };
-
-function loadFonts(){
-  const head=document.head;
-  ['body_url','heading_url'].forEach(k=>{
-    const url=config.profile.fonts[k];
-    if(url){const link=document.createElement('link');link.rel='stylesheet';link.href=url;head.appendChild(link);}
-  });
-}
-
-loadFonts();
 
 function applyTheme(){
   const root=document.documentElement;
@@ -310,8 +282,8 @@ function applyTheme(){
   root.style.setProperty('--desc-body-color', p.colors.desc_body_text);
   root.style.setProperty('--card-title-color', p.colors.card_title_text);
   root.style.setProperty('--footer-link-color', p.colors.footer_text);
-  root.style.setProperty('--font-body', p.fonts.body_family);
-  root.style.setProperty('--font-heading', p.fonts.heading_family);
+  root.style.setProperty('--font-body', p.fonts.primary.family);
+  root.style.setProperty('--font-heading', p.fonts.heading.family);
   root.style.setProperty('--card-title-lines', p.clamp.card_title_lines);
   root.style.setProperty('--header-font-size', p.typography.header_rem + 'rem');
   root.style.setProperty('--header-font-weight', p.typography.header_weight);
@@ -332,7 +304,7 @@ function applyTheme(){
   let bandMax = SHORT;
   let boxMax  = '720px';
   let pMax    = '600px';
-  let margin  = 'var(--gap) auto var(--gap)';
+  let margin  = 'var(--gap) auto';
   if (widthMode === 'mid') {
     bandMax = 'min(960px, 90vw)';
     boxMax  = 'min(720px, 90vw)';
@@ -340,7 +312,7 @@ function applyTheme(){
   }
   if (widthMode === 'full') {
     bandMax = '100vw';
-    margin  = 'var(--gap) 0 var(--gap)';
+    margin  = 'var(--gap) 0';
     boxMax  = 'min(90vw, var(--grid-max))';
     pMax    = 'min(70ch, 90vw)';
   }
@@ -427,7 +399,6 @@ function renderDescription(parent){
   if(!config.profile.description.visible) return;
   const wrap=createEl('div','surface');
   applySurface(wrap, config.profile.surfaces.desc_band, config.profile.colors.desc_band_bg);
-  wrap.style.padding='var(--gap) 0';
   const d=createEl('div','description style-1 align-' + config.profile.layout.description_align);
   d.setAttribute('data-sticky', config.profile.description.sticky);
   const h1=createEl('h1');h1.textContent=config.profile.description.title;d.appendChild(h1);
@@ -440,7 +411,6 @@ function renderDescription(parent){
 
 function renderCards(parent){
   const wrap=createEl('div','surface');
-  wrap.style.padding='var(--gap) 0';
   const main=createEl('main','grid');
   (config.links.cards||[]).slice(0,4).forEach(c=>{
     const card=createEl('a','card');card.href=c.href||'#';card.target='_blank';
@@ -514,7 +484,6 @@ function renderFooterStage(){
   const stage=document.getElementById('stage-footer');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  screen.style.minHeight='810px';
   screen.style.justifyContent='flex-end';
   renderFooter(screen);
   stage.appendChild(screen);
@@ -526,8 +495,6 @@ function renderDescriptionStage(){
   const stage=document.getElementById('stage-description');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  screen.style.minHeight='810px';
-  screen.style.justifyContent='center';
   renderDescription(screen);
   stage.appendChild(screen);
   fitStage(stage);
@@ -538,6 +505,7 @@ function renderCardsStage(){
   const stage=document.getElementById('stage-cards');
   stage.innerHTML='';
   const screen=createEl('div','screen');
+  screen.style.paddingTop='var(--gap)';
   renderCards(screen);
   stage.appendChild(screen);
   fitStage(stage);
@@ -620,7 +588,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <div id="tab-header" class="tab"><div id="stage-header" class="stage checkerboard" style="width:100%;height:40vh"></div></div>
 <div id="tab-footer" class="tab"><div id="stage-footer" class="stage checkerboard" style="width:100%;height:40vh"></div></div>
 <div id="tab-description" class="tab"><div id="stage-description" class="stage checkerboard" style="width:100%;height:50vh"></div></div>
-<div id="tab-cards" class="tab"><div id="stage-cards" class="stage checkerboard" style="width:100%;height:60vh"></div></div>
-<div id="tab-background" class="tab"><div id="stage-background" class="stage" style="width:100%;height:60vh"></div></div>
+<div id="tab-cards" class="tab"><div id="stage-cards" class="stage checkerboard" style="width:100%;height:80vh"></div></div>
+<div id="tab-background" class="tab"><div id="stage-background" class="stage" style="width:100%;height:90vh"></div></div>
 </body>
 </html>
