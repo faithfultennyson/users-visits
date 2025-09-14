@@ -38,14 +38,14 @@ export function applyTheme(profile) {
   // Body/background
   applySurface(document.body, profile.surfaces.background, {
     gradient: profile.colors.gradient,
-    solid: profile.colors.page_bg
+    solid: profile.colors.background_bg || profile.colors.page_bg
   });
 
   // Header (maps to --header-bg/--header-blur in styles.css)
   applySurface(
     document.querySelector('.header'),
     profile.surfaces.header,
-    { gradient: profile.colors.gradient, solid: profile.colors.page_bg },
+    { gradient: profile.colors.gradient, solid: profile.colors.header_bg || profile.colors.page_bg },
     '--header-bg',
     '--header-blur'
   );
@@ -54,7 +54,7 @@ export function applyTheme(profile) {
   applySurface(
     document.querySelector('.footer'),
     profile.surfaces.footer,
-    { gradient: profile.colors.gradient, solid: profile.colors.page_bg },
+    { gradient: profile.colors.gradient, solid: profile.colors.footer_bg || profile.colors.page_bg },
     '--footer-bg',
     '--footer-blur'
   );
@@ -143,6 +143,8 @@ export function applyTheme(profile) {
 
       if (band.mode === 'gradient') {
         desc.style.background = profile.colors.desc_band_bg;
+      } else if (band.mode === 'solid') {
+        desc.style.background = profile.colors.desc_bg || profile.colors.page_bg;
       } else if (band.mode === 'image' && band.image?.url) {
         desc.style.backgroundImage = `url(${band.image.url})`;
         desc.style.backgroundSize = band.image.fit || 'cover';
