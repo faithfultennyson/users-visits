@@ -2,20 +2,37 @@ import { createPayload, initializeBeacon } from './beacon.js';
 
 const QUEUE_KEY = 'cg_queue';
 const memoryQueue = [];
+let storageAvailable = true;
+let storageWarned = false;
 
 function loadQueue() {
     try {
         const stored = sessionStorage.getItem(QUEUE_KEY);
         return stored ? JSON.parse(stored) : memoryQueue;
     } catch (e) {
+        if (!storageWarned) {
+            console.warn('analytics storage unavailable', e);
+            storageWarned = true;
+        }
+        storageAvailable = false;
         return memoryQueue;
     }
 }
 
 function saveQueue() {
+    if (!storageAvailable) {
+        memoryQueue.length = 0;
+        memoryQueue.push(...eventQueue);
+        return;
+    }
     try {
         sessionStorage.setItem(QUEUE_KEY, JSON.stringify(eventQueue));
     } catch (e) {
+        if (!storageWarned) {
+            console.warn('analytics storage unavailable', e);
+            storageWarned = true;
+        }
+        storageAvailable = false;
         memoryQueue.length = 0;
         memoryQueue.push(...eventQueue);
     }
@@ -97,16 +114,16 @@ export function trackPageView() {
     }, 2000);
 }
 
-export function trackCardImpression(uid) {
+export function trackCardImpression(cardPublicHash) {
     trackEvent('card_impression', {
-        uid,
+        public_hash: cardPublicHash,
         dwell_time: totalDwellTime
     });
 }
 
-export function trackCardClick(uid) {
+export function trackCardClick(cardPublicHash) {
     trackEvent('card_click', {
-        uid,
+        public_hash: cardPublicHash,
         dwell_time: totalDwellTime
     });
 }
@@ -119,17 +136,17 @@ export function trackHeaderLinkClick(href, source = 'header') {
     });
 }
 
-export function trackReportOpen(uid, reason) {
+export function trackReportOpen(cardPublicHash, reason) {
     trackEvent('report_open', {
-        uid,
+        public_hash: cardPublicHash,
         reason,
         dwell_time: totalDwellTime
     });
 }
 
-export function trackReportSubmit(uid, reportData) {
+export function trackReportSubmit(cardPublicHash, reportData) {
     trackEvent('report_submit', {
-        uid,
+        public_hash: cardPublicHash,
         report_type: reportData.type,
         message: reportData.message,
         contact: reportData.contact,
@@ -150,8 +167,8 @@ export function initializeAnalytics() {
         (entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-                    const uid = entry.target.dataset.uid;
-                    if (uid) trackCardImpression(uid);
+                    const cardPublicHash = entry.target.dataset.cardPublicHash;
+                    if (cardPublicHash) trackCardImpression(cardPublicHash);
                     observer.unobserve(entry.target);
                 }
             });
@@ -160,7 +177,7 @@ export function initializeAnalytics() {
     );
 
     // Observe all cards
-    document.querySelectorAll('.card[data-uid]').forEach(card => {
+    document.querySelectorAll('.card[data-card-public-hash]').forEach(card => {
         observer.observe(card);
     });
 

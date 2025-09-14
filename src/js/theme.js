@@ -10,49 +10,13 @@ export function applyTheme(profile) {
   const root = document.documentElement;
 
   // --- Fonts ---------------------------------------------------------------
-  const fonts = profile.typography?.fonts;
-
+  const fonts = profile.fonts;
   if (fonts) {
-    const urls = [];
-    const bodyUrl = fonts.primary_url || fonts.body_url;
-    const headingUrl = fonts.heading_url;
-    if (bodyUrl) urls.push(bodyUrl);
-    if (headingUrl && headingUrl !== bodyUrl) urls.push(headingUrl);
-
-    const existing = Array.from(
-      document.head.querySelectorAll('link[data-profile-font]')
-    );
-
-    for (const url of urls) {
-      if (!document.head.querySelector(`link[href="${url}"]`)) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = url;
-        link.dataset.profileFont = 'true';
-        document.head.appendChild(link);
-      }
-    }
-
-    for (const link of existing) {
-      if (!urls.includes(link.href)) link.remove();
-    }
-
-    const bodyFamily =
-      fonts.primary_name ||
-      fonts.body_family ||
-      profile.fonts?.body?.family ||
-      'Inter, system-ui, sans-serif';
-    const headingFamily =
-      fonts.heading_name ||
-      fonts.heading_family ||
-      profile.fonts?.heading?.family ||
-      'var(--font-body)';
-
+    const bodyFamily = fonts.primary?.family || 'Inter, system-ui, sans-serif';
+    const headingFamily = fonts.heading?.family || bodyFamily;
     root.style.setProperty('--font-body', bodyFamily);
     root.style.setProperty('--font-heading', headingFamily);
     document.body.style.fontFamily = 'var(--font-body)';
-  } else {
-    loadFonts(profile.fonts);
   }
 
   // --- Brand tokens ---------------------------------------------------------
@@ -74,14 +38,14 @@ export function applyTheme(profile) {
   // Body/background
   applySurface(document.body, profile.surfaces.background, {
     gradient: profile.colors.gradient,
-    solid: profile.colors.page_bg
+    solid: profile.colors.background_bg || profile.colors.page_bg
   });
 
   // Header (maps to --header-bg/--header-blur in styles.css)
   applySurface(
     document.querySelector('.header'),
     profile.surfaces.header,
-    { gradient: profile.colors.gradient, solid: profile.colors.page_bg },
+    { gradient: profile.colors.gradient, solid: profile.colors.header_bg || profile.colors.page_bg },
     '--header-bg',
     '--header-blur'
   );
@@ -90,7 +54,7 @@ export function applyTheme(profile) {
   applySurface(
     document.querySelector('.footer'),
     profile.surfaces.footer,
-    { gradient: profile.colors.gradient, solid: profile.colors.page_bg },
+    { gradient: profile.colors.gradient, solid: profile.colors.footer_bg || profile.colors.page_bg },
     '--footer-bg',
     '--footer-blur'
   );
@@ -179,6 +143,8 @@ export function applyTheme(profile) {
 
       if (band.mode === 'gradient') {
         desc.style.background = profile.colors.desc_band_bg;
+      } else if (band.mode === 'solid') {
+        desc.style.background = profile.colors.desc_bg || profile.colors.page_bg;
       } else if (band.mode === 'image' && band.image?.url) {
         desc.style.backgroundImage = `url(${band.image.url})`;
         desc.style.backgroundSize = band.image.fit || 'cover';
@@ -345,9 +311,12 @@ function ensureSurfaceVideo(host, src, className) {
       width: '100%',
       height: '100%',
       objectFit: 'cover',
-      zIndex: '0'
+      zIndex: '-1',
+      pointerEvents: 'none'
     });
-    host.style.position = host.style.position || 'relative';
+    // Preserve existing positioning like fixed or sticky; only adjust if static
+    const pos = getComputedStyle(host).position;
+    if (pos === 'static') host.style.position = 'relative';
     host.prepend(v); // behind content
   }
   if (v.src !== src) v.src = src;
@@ -409,7 +378,7 @@ export function applySurfaceVideos(profile) {
 }
 
 let defaultFontLoaded = false;
-async function loadFonts(fonts) {
+async function loadFonts() {
   // Ensure default Inter is loaded to avoid flashes.
   if (!defaultFontLoaded) {
     const interHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
@@ -420,29 +389,5 @@ async function loadFonts(fonts) {
       document.head.appendChild(link);
     }
     defaultFontLoaded = true;
-  }
-
-  if (!fonts) return;
-
-  const urls = [];
-  const bodyUrl = fonts.body?.url;
-  const headingUrl = fonts.heading?.url;
-  if (bodyUrl) urls.push(bodyUrl);
-  if (headingUrl && headingUrl !== bodyUrl) urls.push(headingUrl);
-
-  const existing = Array.from(document.head.querySelectorAll('link[data-profile-font]'));
-
-  for (const url of urls) {
-    if (!document.head.querySelector(`link[href="${url}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = url;
-      link.dataset.profileFont = 'true';
-      document.head.appendChild(link);
-    }
-  }
-
-  for (const link of existing) {
-    if (!urls.includes(link.href)) link.remove();
   }
 }

@@ -1,5 +1,5 @@
 {
-  "handle": "your-Guy Never sleep Ohhh",
+  "handle": "Take_Down",
 
   "brand": {
     "primary": "#26C6DA",
@@ -19,7 +19,6 @@
   },
 
   "colors": {
-    "page_bg": "#121212",
     "accent": "#26C6DA",
     "gradient": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))",
     "header_text": "#FFFFFF",
@@ -28,18 +27,52 @@
     "card_title_text": "#FFFFFF",
     "footer_text": "#CCCCCC",
     "card_bg": "#121212",
-    "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
+    "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))",
+    "header_bg": "#26C6DA",
+    "footer_bg": "#26C6DA",
+    "desc_bg": "#3A0CA3",
+    "background_bg": "#26C6DA"
   },
 
-   "cards": { "shape": "blocky", "radius_px": 18, "bevel_px": 10 },
+  "cards": { "shape": "round", "radius_px": 18, "bevel_px": 10 },
+
+  "fonts": {
+    "primary": {
+      "family": "'Bebas Neue', sans-serif",
+      "weights": ["400"],
+      "css_url": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+    },
+    "heading": {
+      "family": "'Merriweather', serif",
+      "weights": ["400", "700"],
+      "css_url": "https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
+    }
+  },
+
+  
 
   "surfaces": {
-    "background": { "mode": "video", "video": { "url": "/assets/videos/video.webm", "fit": "cover" } },
-    "header":     { "mode": "glass", "video": { "url": "/assets/videos/video.webm", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.20, "blur_px": 15 } },
-    "footer":     { "mode": "glass", "image": { "url": null }, "glass": { "opacity": 0.2, "blur_px": 15 } },
-    "desc_band":  { "mode": "glass", "video": { "url": "/assets/videos/video.webm", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 }, "glass": { "opacity": 0.20, "blur_px": 15 } }
-  
+  "background": { "mode": "video",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 },
+    "glass": { "opacity": 0.0, "blur_px": 0 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
   },
+  "header": { "mode": "glass",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center", "tint": 0, "blur_px": 0 },
+    "glass": { "opacity": 0.10, "blur_px": 15 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
+  },
+  "footer": { "mode": "glass",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" },
+    "glass": { "opacity": 0.20, "blur_px": 15 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
+  },
+  "desc_band": { "mode": "glass",
+    "image": { "url": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=742&h=960&fit=crop", "fit": "cover", "pos": "center" },
+    "glass": { "opacity": 0.8, "blur_px": 35 },
+    "video": { "url": "/assets/videos/video.webm", "fit": "cover" }
+  }
+},
 
   "sizes": {
     "header_height_px": 94,
@@ -74,7 +107,7 @@
   "description": {
     "visible": true,
     "sticky": true,
-    "width": "mid",
+    "width": "short",
     "title": "Welcome to my creative space",
     "body": "Explore my latest content from Instagram and TikTok. Feel free to browse through my curated collection of posts and connect with me on various social platforms",
     "marketing_link": {
