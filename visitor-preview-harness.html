@@ -121,7 +121,8 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
+    z-index: -1;
+    pointer-events: none;
 }
 
 /* header */
@@ -321,35 +322,30 @@ function applyTheme(){
   root.style.setProperty('--footer-padding-y', p.sizes.footer_padding_y_px + 'px');
   root.style.setProperty('--logo-size', p.sizes.logo_px + 'px');
 
-  const widthMode = (p.description.width || 'short').toLowerCase();
+  const widthMode = (p.description?.width || 'short').toLowerCase();
   const SHORT = 'clamp(320px, 60ch, 720px)';
-  let bandMax, boxMax, pMax, margin;
-  
-  switch(widthMode) {
-    case 'mid':
-      bandMax = 'min(960px, 90vw)';
-      boxMax  = 'min(720px, 90vw)';
-      pMax    = 'min(600px, 80vw)';
-      margin  = '2rem auto';
-      break;
-    case 'full':
-      bandMax = '100%';
-      boxMax  = 'min(90vw, var(--grid-max))';
-      pMax    = 'min(70ch, 90vw)';
-      margin  = '2rem 0';
-      break;
-    default: // 'short'
-      bandMax = SHORT;
-      boxMax  = '720px';
-      pMax    = '600px';
-      margin  = '2rem auto';
+  let bandMax = SHORT;
+  let boxMax  = '720px';
+  let pMax    = '600px';
+  let margin  = 'var(--gap) auto';
+
+  if (widthMode === 'mid') {
+    bandMax = `max(${SHORT}, min(90vw, var(--grid-max)))`;
+    boxMax  = 'min(70vw, var(--grid-max))';
+    pMax    = '70%';
   }
-  
-  root.style.setProperty('--description-width-mode', widthMode);
+
+  if (widthMode === 'full') {
+    bandMax = '100vw';
+    margin  = 'var(--gap) 0';
+    boxMax  = 'min(90vw, var(--grid-max))';
+    pMax    = 'min(70ch, 90vw)';
+  }
+
   root.style.setProperty('--description-max-width', bandMax);
-  root.style.setProperty('--description-margin', margin);
+  root.style.setProperty('--description-margin',    margin);
   root.style.setProperty('--description-content-max', boxMax);
-  root.style.setProperty('--description-p-max', pMax);
+  root.style.setProperty('--description-p-max',       pMax);
 }
 
 function createEl(tag, cls){const el=document.createElement(tag);if(cls)el.className=cls;return el;}
@@ -362,79 +358,45 @@ function applySurface(el, surf, fallback){
   el.style.backdropFilter='';
   el.style.webkitBackdropFilter='';
   if(!surf) return;
-  const layers=[];
-  
-  // If it's glass mode, apply the background effect first
-  if(surf.mode === 'glass') {
-    // Get the parent background if available
-    const parentBg = config.profile.surfaces.background;
-    if(parentBg && parentBg.mode) {
-      switch(parentBg.mode) {
-        case 'gradient':
-          layers.push(config.profile.colors.gradient);
-          break;
-        case 'solid':
-          layers.push(config.profile.colors.page_bg);
-          break;
-        case 'image':
-          if(parentBg.image?.url) {
-            layers.push(`url(${parentBg.image.url}) ${parentBg.image.pos || 'center'}/${parentBg.image.fit || 'cover'} no-repeat`);
-          }
-          break;
-      }
-    }
+
+  const {mode, image, video, glass} = surf;
+
+  if(mode === 'glass' && glass){
+    el.style.background = `rgba(255,255,255,${glass.opacity||0})`;
+    el.style.backdropFilter = `blur(${glass.blur_px||0}px)`;
+    el.style.webkitBackdropFilter = `blur(${glass.blur_px||0}px)`;
+    return;
   }
-  
-  switch(surf.mode){
-    case 'gradient':
-      layers.push(config.profile.colors.gradient);
-      break;
-    case 'solid':
-      layers.push(surf === config.profile.surfaces.background ? 
-        config.profile.colors.background_bg || config.profile.colors.page_bg :
-        surf === config.profile.surfaces.header ? 
-          config.profile.colors.header_bg || config.profile.colors.page_bg :
-          surf === config.profile.surfaces.footer ?
-            config.profile.colors.footer_bg || config.profile.colors.page_bg :
-            surf === config.profile.surfaces.desc_band ?
-              config.profile.colors.desc_band_bg || config.profile.colors.page_bg :
-              config.profile.colors.page_bg
-      );
-      break;
-    case 'image':
-      if(surf.image && surf.image.url){
-        const fit=surf.image.fit||'cover';
-        const pos=surf.image.pos||'center';
-        layers.push(`url(${surf.image.url}) ${pos}/${fit} no-repeat`);
-      }
-      break;
-    case 'video':
-      if(surf.video && surf.video.url){
-        el.style.background='transparent';
-        const vid=createEl('video','video-bg');
-        vid.src=surf.video.url;
-        vid.autoplay=true;
-        vid.muted=true;
-        vid.loop=true;
-        vid.playsInline=true;
-        vid.style.objectFit=surf.video.fit||'cover';
-        el.appendChild(vid);
-      }
-      break;
-    case 'glass':
-      if(surf.glass){
-        el.style.backdropFilter = `blur(${surf.glass.blur_px || 0}px)`;
-        el.style.webkitBackdropFilter = `blur(${surf.glass.blur_px || 0}px)`;
-        layers.unshift(`rgba(255,255,255,${surf.glass.opacity || 0})`);
-      }
-      break;
+
+  if(mode === 'gradient'){
+    el.style.background = config.profile.colors.gradient;
+    return;
   }
-  if(surf.mode==='glass' && surf.glass){
-    layers.unshift(`rgba(255,255,255,${surf.glass.opacity||0})`);
-    el.style.backdropFilter=`blur(${surf.glass.blur_px||0}px)`;
-    el.style.webkitBackdropFilter=`blur(${surf.glass.blur_px||0}px)`;
+
+  if(mode === 'solid'){
+    el.style.background = fallback || config.profile.colors.page_bg;
+    return;
   }
-  if(layers.length) el.style.background=layers.join(', ');
+
+  if(mode === 'image' && image && image.url){
+    const fit=image.fit||'cover';
+    const pos=image.pos||'center';
+    el.style.background = `url(${image.url}) ${pos}/${fit} no-repeat`;
+    return;
+  }
+
+  if(mode === 'video' && video && video.url){
+    el.style.background='transparent';
+    const vid=createEl('video','video-bg');
+    vid.src=video.url;
+    vid.autoplay=true;
+    vid.muted=true;
+    vid.loop=true;
+    vid.playsInline=true;
+    vid.style.objectFit=video.fit||'cover';
+    vid.style.objectPosition=video.pos||'center';
+    el.appendChild(vid);
+  }
 }
 
 function renderHeader(parent){
@@ -539,9 +501,12 @@ function renderHeaderStage(){
   const stage=document.getElementById('stage-header');
   stage.innerHTML='';
   const screen=createEl('div','screen');
+  screen.style.height=config.profile.sizes.header_height_px + 'px';
   renderHeader(screen);
   stage.appendChild(screen);
   fitStage(stage);
+  const scale=stage.clientWidth/1440;
+  stage.style.height=(config.profile.sizes.header_height_px*scale)+'px';
 }
 
 function renderFooterStage(){
@@ -552,7 +517,13 @@ function renderFooterStage(){
   screen.style.justifyContent='flex-end';
   renderFooter(screen);
   stage.appendChild(screen);
+  const surf=screen.querySelector('.surface');
+  surf.style.height='auto';
+  const h=surf.offsetHeight;
+  screen.style.height=h+'px';
   fitStage(stage);
+  const scale=stage.clientWidth/1440;
+  stage.style.height=(h*scale)+'px';
 }
 
 function renderDescriptionStage(){
@@ -562,7 +533,13 @@ function renderDescriptionStage(){
   const screen=createEl('div','screen');
   renderDescription(screen);
   stage.appendChild(screen);
+  const surf=screen.querySelector('.surface');
+  surf.style.height='auto';
+  const h=surf.offsetHeight;
+  screen.style.height=h+'px';
   fitStage(stage);
+  const scale=stage.clientWidth/1440;
+  stage.style.height=(h*scale)+'px';
 }
 
 function renderCardsStage(){
@@ -587,6 +564,14 @@ function renderBackgroundStage(){
 }
 
 function initTabs(){
+  const renderMap={
+    'tab-all': renderAll,
+    'tab-header': renderHeaderStage,
+    'tab-footer': renderFooterStage,
+    'tab-description': renderDescriptionStage,
+    'tab-cards': renderCardsStage,
+    'tab-background': renderBackgroundStage
+  };
   document.querySelectorAll('.tabs button').forEach(btn=>{
     btn.addEventListener('click',()=>{
       document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected','false'));
@@ -594,8 +579,8 @@ function initTabs(){
       document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
       const tab=document.getElementById(btn.dataset.tab);
       tab.classList.add('active');
-      const stage=tab.querySelector('.stage');
-      if(stage) fitStage(stage);
+      const fn=renderMap[btn.dataset.tab];
+      if(fn) fn();
     });
   });
 }
@@ -653,9 +638,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   <button aria-selected="false" data-tab="tab-background">Background</button>
 </div>
 <div id="tab-all" class="tab active"><div id="stage-all" class="stage scrollable checkerboard" style="width:100%;height:46.25vw"></div></div>
-<div id="tab-header" class="tab"><div id="stage-header" class="stage checkerboard" style="width:100%;height:40vh"></div></div>
-<div id="tab-footer" class="tab"><div id="stage-footer" class="stage checkerboard" style="width:100%;height:40vh"></div></div>
-<div id="tab-description" class="tab"><div id="stage-description" class="stage checkerboard" style="width:100%;height:50vh"></div></div>
+<div id="tab-header" class="tab"><div id="stage-header" class="stage checkerboard" style="width:100%"></div></div>
+<div id="tab-footer" class="tab"><div id="stage-footer" class="stage checkerboard" style="width:100%"></div></div>
+<div id="tab-description" class="tab"><div id="stage-description" class="stage checkerboard" style="width:100%"></div></div>
 <div id="tab-cards" class="tab"><div id="stage-cards" class="stage checkerboard" style="width:100%;height:80vh"></div></div>
 <div id="tab-background" class="tab"><div id="stage-background" class="stage" style="width:100%;height:90vh"></div></div>
 </body>
