@@ -104,7 +104,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 .tab.active{display:block;}
 
 /* canvas / stage */
-.stage{position:relative;width:100%;aspect-ratio:16/9;border:1px solid #555;overflow:hidden;}
+.stage{position:relative;width:100%;aspect-ratio:16/9;border:1px solid #555;overflow:auto;margin:0 auto;}
 .stage .screen{position:absolute;top:0;left:0;display:flex;flex-direction:column;width:1440px;}
 .surface{width:100%;}
 .checkerboard{background-size:20px 20px;background-position:0 0,10px 10px;background-image:linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666),linear-gradient(45deg,#666 25%,transparent 25%,transparent 75%,#666 75%,#666);}
@@ -316,6 +316,7 @@ function applyTheme(){
 function createEl(tag, cls){const el=document.createElement(tag);if(cls)el.className=cls;return el;}
 
 function applySurface(el, surf, fallback){
+  el.querySelectorAll('.video-bg').forEach(v=>v.remove());
   el.style.background = fallback || '';
   if(!surf) return;
   const layers=[];
@@ -326,6 +327,8 @@ function applySurface(el, surf, fallback){
     const vid=createEl('video','video-bg');
     vid.src=surf.video.url;vid.autoplay=true;vid.muted=true;vid.loop=true;
     el.appendChild(vid);
+  } else if(surf.mode==='glass') {
+    // glass-only; no base layer
   }
   if(surf.glass && surf.glass.opacity>0){
     layers.unshift(`rgba(255,255,255,${surf.glass.opacity})`);
@@ -417,14 +420,11 @@ function fitStage(stage){
   const screen=stage.querySelector('.screen');
   if(!screen) return;
   const width=1440;
-  const height=screen.offsetHeight;
-  const scale=Math.min(stage.clientWidth/width, stage.clientHeight/height);
+  const scale=stage.clientWidth/width;
   screen.style.transform=`scale(${scale})`;
   screen.style.transformOrigin='top left';
-  const offsetX=(stage.clientWidth - width*scale)/2;
-  const offsetY=(stage.clientHeight - height*scale)/2;
-  screen.style.left=offsetX+'px';
-  screen.style.top=offsetY+'px';
+  screen.style.left='0';
+  screen.style.top='0';
 }
 
 function renderAll(){
@@ -485,10 +485,7 @@ function renderBackgroundStage(){
   applyTheme();
   const stage=document.getElementById('stage-background');
   stage.innerHTML='';
-  const screen=createEl('div','screen');
-  applySurface(screen, config.profile.surfaces.background, config.profile.colors.page_bg);
-  stage.appendChild(screen);
-  fitStage(stage);
+  applySurface(stage, config.profile.surfaces.background, config.profile.colors.page_bg);
 }
 
 function initTabs(){
@@ -504,9 +501,17 @@ function initTabs(){
 
 function initControls(){
   document.getElementById('radius').value=config.profile.cards.radius_px;
+
+  document.getElementById('bg-mode').value=config.profile.surfaces.background.mode;
   document.getElementById('apply').addEventListener('click',()=>{
     config.profile.cards.radius_px=parseInt(document.getElementById('radius').value,10) || 0;
-    renderAll();renderHeaderStage();renderFooterStage();renderDescriptionStage();renderCardsStage();
+    config.profile.surfaces.background.mode=document.getElementById('bg-mode').value;
+    renderAll();
+    renderHeaderStage();
+    renderFooterStage();
+    renderDescriptionStage();
+    renderCardsStage();
+    renderBackgroundStage();
   });
 }
 
@@ -525,6 +530,15 @@ document.addEventListener('DOMContentLoaded',()=>{
 <body>
 <div id="controls">
   <label>Card Radius <input type="number" id="radius" min="0" max="50"></label>
+  <label>Background Mode
+    <select id="bg-mode">
+      <option value="solid">solid</option>
+      <option value="gradient">gradient</option>
+      <option value="image">image</option>
+      <option value="video">video</option>
+      <option value="glass">glass</option>
+    </select>
+  </label>
   <button id="apply">Apply</button>
 </div>
 <div class="tabs">
@@ -535,11 +549,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   <button aria-selected="false" data-tab="tab-cards">Cards</button>
   <button aria-selected="false" data-tab="tab-background">Background</button>
 </div>
-<div id="tab-all" class="tab active"><div id="stage-all" class="stage checkerboard"></div></div>
-<div id="tab-header" class="tab"><div id="stage-header" class="stage checkerboard" style="height:40vh"></div></div>
-<div id="tab-footer" class="tab"><div id="stage-footer" class="stage checkerboard" style="height:40vh"></div></div>
-<div id="tab-description" class="tab"><div id="stage-description" class="stage checkerboard" style="height:50vh"></div></div>
-<div id="tab-cards" class="tab"><div id="stage-cards" class="stage checkerboard" style="height:60vh"></div></div>
-<div id="tab-background" class="tab"><div id="stage-background" class="stage" style="height:60vh"></div></div>
+<div id="tab-all" class="tab active"><div id="stage-all" class="stage checkerboard" style="width:100%;height:56.25vw"></div></div>
+<div id="tab-header" class="tab"><div id="stage-header" class="stage checkerboard" style="width:100%;height:40vh"></div></div>
+<div id="tab-footer" class="tab"><div id="stage-footer" class="stage checkerboard" style="width:100%;height:40vh"></div></div>
+<div id="tab-description" class="tab"><div id="stage-description" class="stage checkerboard" style="width:100%;height:50vh"></div></div>
+<div id="tab-cards" class="tab"><div id="stage-cards" class="stage checkerboard" style="width:100%;height:60vh"></div></div>
+<div id="tab-background" class="tab"><div id="stage-background" class="stage" style="width:100%;height:60vh"></div></div>
 </body>
 </html>
