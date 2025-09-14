@@ -137,7 +137,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 #hamburger{padding:1rem;margin-left:1rem;background:none;border:none;color:var(--text);cursor:pointer;font-size:clamp(2rem,8vw,2.5rem);}
 
 /* description */
-.description{max-width:var(--description-max-width);margin:var(--description-margin);padding:2rem 1rem;border-radius:var(--description-border-radius);color:white;position:relative;z-index:200;}
+.description{max-width:var(--description-max-width);margin:var(--description-margin);padding:clamp(1rem,5vw,2rem);border-radius:var(--description-border-radius);color:white;position:relative;z-index:200;}
 .description > * {max-width:var(--description-content-max);margin-left:auto;margin-right:auto;}
 .description h1{font-size:var(--desc-title-size);font-weight:var(--desc-title-weight);margin-bottom:1rem;color:var(--desc-title-color);}
 .description p{font-size:var(--desc-body-size);font-weight:var(--desc-body-weight);opacity:0.9;max-width:var(--description-p-max);margin:0 auto;color:var(--desc-body-color);}
@@ -424,16 +424,15 @@ function renderHeader(parent){
 
 function renderDescription(parent){
   if(!config.profile.description.visible) return;
-  const wrap=createEl('div','surface');
-  applySurface(wrap, config.profile.surfaces.desc_band, config.profile.colors.desc_band_bg);
   const d=createEl('div','description style-1 align-' + config.profile.layout.description_align);
   d.setAttribute('data-sticky', config.profile.description.sticky);
+  applySurface(d, config.profile.surfaces.desc_band, config.profile.colors.desc_band_bg);
   const h1=createEl('h1');h1.textContent=config.profile.description.title;d.appendChild(h1);
   const p=createEl('p');p.textContent=config.profile.description.body;d.appendChild(p);
   if(config.profile.description.marketing_link.show){
     const a=document.createElement('a');a.href='/signup';a.className='create-link';const em=document.createElement('em');em.textContent=config.profile.description.marketing_link.text;a.appendChild(em);d.appendChild(a);
   }
-  wrap.appendChild(d);parent.appendChild(wrap);
+  parent.appendChild(d);
 }
 
 function renderCards(parent){
@@ -517,9 +516,9 @@ function renderFooterStage(){
   screen.style.justifyContent='flex-end';
   renderFooter(screen);
   stage.appendChild(screen);
-  const surf=screen.querySelector('.surface');
-  surf.style.height='auto';
-  const h=surf.offsetHeight;
+  const footerEl=screen.querySelector('.footer');
+  if(!footerEl) return;
+  const h=footerEl.offsetHeight;
   screen.style.height=h+'px';
   fitStage(stage);
   const scale=stage.clientWidth/1440;
@@ -533,9 +532,9 @@ function renderDescriptionStage(){
   const screen=createEl('div','screen');
   renderDescription(screen);
   stage.appendChild(screen);
-  const surf=screen.querySelector('.surface');
-  surf.style.height='auto';
-  const h=surf.offsetHeight;
+  const descEl=screen.querySelector('.description');
+  if(!descEl) return;
+  const h=descEl.offsetHeight;
   screen.style.height=h+'px';
   fitStage(stage);
   const scale=stage.clientWidth/1440;
