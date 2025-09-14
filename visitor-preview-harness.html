@@ -501,6 +501,7 @@ function initTabs(){
 
 function initControls(){
   document.getElementById('radius').value=config.profile.cards.radius_px;
+
   document.getElementById('bg-mode').value=config.profile.surfaces.background.mode;
   document.getElementById('apply').addEventListener('click',()=>{
     config.profile.cards.radius_px=parseInt(document.getElementById('radius').value,10) || 0;
