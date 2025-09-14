@@ -18,7 +18,7 @@
     --creator-card-radius: 18px;
 
     /* Layout */
-    --grid-max: 960px;
+    --grid-max: 1440px;
     --gap: clamp(1.5rem, 2vw, 2rem);
 
     /* Typography */
@@ -147,7 +147,7 @@ body{line-height:1.5;color:var(--text);background:var(--creator-bg);min-height:1
 .copy-feedback.visible{opacity:1;transform:translate(-50%,-50%) scale(1);}
 
 /* background video */
-.video-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;pointer-events:none;}
+.video-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;}
 
 /* footer */
 .footer{position:relative;margin-top:auto;padding:var(--footer-padding-y) max(1rem, calc((100% - var(--grid-max)) / 2));border-top:1px solid var(--footer-bd);text-align:center;}
@@ -326,7 +326,9 @@ function createEl(tag, cls){const el=document.createElement(tag);if(cls)el.class
 
 function applySurface(el, surf, fallback){
   el.querySelectorAll('.video-bg').forEach(v=>v.remove());
-  el.style.background = fallback || '';
+  el.style.position='relative';
+  el.style.overflow='hidden';
+  el.style.background = fallback || 'transparent';
   el.style.backdropFilter='';
   el.style.webkitBackdropFilter='';
   if(!surf) return;
@@ -347,8 +349,14 @@ function applySurface(el, surf, fallback){
       break;
     case 'video':
       if(surf.video && surf.video.url){
+        el.style.background='transparent';
         const vid=createEl('video','video-bg');
-        vid.src=surf.video.url;vid.autoplay=true;vid.muted=true;vid.loop=true;
+        vid.src=surf.video.url;
+        vid.autoplay=true;
+        vid.muted=true;
+        vid.loop=true;
+        vid.playsInline=true;
+        vid.style.objectFit=surf.video.fit||'cover';
         el.appendChild(vid);
       }
       break;
@@ -366,8 +374,8 @@ function applySurface(el, surf, fallback){
 
 function renderHeader(parent){
   const wrap=createEl('div','surface');
+  applySurface(wrap, config.profile.surfaces.header, config.profile.colors.page_bg);
   const header=createEl('header','header');
-  applySurface(header, config.profile.surfaces.header, config.profile.colors.page_bg);
   const content=createEl('div','header-content');
   const branding=createEl('div','branding');
   const logo=document.createElement('img');logo.id='logo';logo.src=config.profile.assets.favicon.png32;logo.alt='';
@@ -390,8 +398,8 @@ function renderHeader(parent){
 function renderDescription(parent){
   if(!config.profile.description.visible) return;
   const wrap=createEl('div','surface');
+  applySurface(wrap, config.profile.surfaces.desc_band, config.profile.colors.desc_band_bg);
   const d=createEl('div','description style-1 align-' + config.profile.layout.description_align);
-  applySurface(d, config.profile.surfaces.desc_band, config.profile.colors.desc_band_bg);
   d.setAttribute('data-sticky', config.profile.description.sticky);
   const h1=createEl('h1');h1.textContent=config.profile.description.title;d.appendChild(h1);
   const p=createEl('p');p.textContent=config.profile.description.body;d.appendChild(p);
@@ -420,8 +428,8 @@ function renderCards(parent){
 function renderFooter(parent){
   if(!config.links.footer.visible) return;
   const wrap=createEl('div','surface');
+  applySurface(wrap, config.profile.surfaces.footer, config.profile.colors.page_bg);
   const footer=createEl('footer','footer');
-  applySurface(footer, config.profile.surfaces.footer, config.profile.colors.page_bg);
   const icons=createEl('div','footer-links');
   config.links.footer.icons.forEach(link=>{
     const a=document.createElement('a');a.href=link.href;a.target='_blank';
@@ -438,9 +446,10 @@ function fitStage(stage){
   if(!screen) return;
   const width=1440;
   const scale=stage.clientWidth/width;
+  const scaledWidth=width*scale;
   screen.style.transform=`scale(${scale})`;
   screen.style.transformOrigin='top left';
-  screen.style.left='0';
+  screen.style.left=`${(stage.clientWidth - scaledWidth)/2}px`;
   screen.style.top='0';
 }
 
@@ -449,9 +458,9 @@ function renderAll(){
   const stage=document.getElementById('stage-all');
   stage.innerHTML='';
   const screen=createEl('div','screen');
-  screen.style.height='810px';
-  screen.style.overflow='hidden';
+  screen.style.minHeight='810px';
   applySurface(screen, config.profile.surfaces.background, config.profile.colors.page_bg);
+  screen.style.overflow='visible';
   renderHeader(screen);
   renderDescription(screen);
   renderCards(screen);
@@ -475,6 +484,7 @@ function renderFooterStage(){
   const stage=document.getElementById('stage-footer');
   stage.innerHTML='';
   const screen=createEl('div','screen');
+  screen.style.justifyContent='flex-end';
   renderFooter(screen);
   stage.appendChild(screen);
   fitStage(stage);
@@ -495,6 +505,7 @@ function renderCardsStage(){
   const stage=document.getElementById('stage-cards');
   stage.innerHTML='';
   const screen=createEl('div','screen');
+  screen.style.paddingTop='var(--gap)';
   renderCards(screen);
   stage.appendChild(screen);
   fitStage(stage);
