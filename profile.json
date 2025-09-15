@@ -28,7 +28,11 @@
     "card_title_text": "#FFFFFF",
     "footer_text": "#CCCCCC",
     "card_bg": "#121212",
-    "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
+    "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))",
+    "header_bg": "#26C6DA",
+    "footer_bg": "#26C6DA",
+    "desc_bg": "#3A0CA3",
+    "background_bg": "#121212"
   },
 
    "cards": { "shape": "blocky", "radius_px": 18, "bevel_px": 10 },

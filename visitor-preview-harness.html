@@ -211,7 +211,11 @@ const config = {
       "card_title_text": "#FFFFFF",
       "footer_text": "#CCCCCC",
       "card_bg": "#121212",
-      "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))"
+      "desc_band_bg": "linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))",
+      "header_bg": "#26C6DA",
+      "footer_bg": "#26C6DA",
+      "desc_bg": "#3A0CA3",
+      "background_bg": "#121212"
     },
     "cards": { "shape": "round", "radius_px": 18, "bevel_px": 10 },
     "fonts": {
@@ -297,7 +301,7 @@ function applyTheme(){
   const root=document.documentElement;
   const p=config.profile;
   root.style.setProperty('--creator-card-radius', p.cards.radius_px + 'px');
-  root.style.setProperty('--creator-bg', p.colors.page_bg);
+  root.style.setProperty('--creator-bg', p.colors.background_bg || p.colors.page_bg);
   root.style.setProperty('--creator-gradient', p.colors.gradient);
   root.style.setProperty('--card-bg', p.colors.card_bg);
   root.style.setProperty('--header-text-color', p.colors.header_text);
@@ -374,7 +378,7 @@ function applySurface(el, surf, fallback){
   }
 
   if(mode === 'solid'){
-    el.style.background = fallback || config.profile.colors.page_bg;
+    el.style.background = fallback || config.profile.colors.background_bg || config.profile.colors.page_bg;
     return;
   }
 
@@ -401,7 +405,7 @@ function applySurface(el, surf, fallback){
 
 function renderHeader(parent){
   const wrap=createEl('div','surface');
-  applySurface(wrap, config.profile.surfaces.header, config.profile.colors.page_bg);
+  applySurface(wrap, config.profile.surfaces.header, config.profile.colors.header_bg || config.profile.colors.page_bg);
   const header=createEl('header','header');
   const content=createEl('div','header-content');
   const branding=createEl('div','branding');
@@ -426,7 +430,7 @@ function renderDescription(parent){
   if(!config.profile.description.visible) return;
   const d=createEl('div','description style-1 align-' + config.profile.layout.description_align);
   d.setAttribute('data-sticky', config.profile.description.sticky);
-  applySurface(d, config.profile.surfaces.desc_band, config.profile.colors.desc_band_bg);
+  applySurface(d, config.profile.surfaces.desc_band, config.profile.colors.desc_bg || config.profile.colors.page_bg);
   const h1=createEl('h1');h1.textContent=config.profile.description.title;d.appendChild(h1);
   const p=createEl('p');p.textContent=config.profile.description.body;d.appendChild(p);
   if(config.profile.description.marketing_link.show){
@@ -454,7 +458,7 @@ function renderCards(parent){
 function renderFooter(parent){
   if(!config.links.footer.visible) return;
   const wrap=createEl('div','surface');
-  applySurface(wrap, config.profile.surfaces.footer, config.profile.colors.page_bg);
+  applySurface(wrap, config.profile.surfaces.footer, config.profile.colors.footer_bg || config.profile.colors.page_bg);
   const footer=createEl('footer','footer');
   const icons=createEl('div','footer-links');
   config.links.footer.icons.forEach(link=>{
@@ -485,7 +489,7 @@ function renderAll(){
   stage.innerHTML='';
   const screen=createEl('div','screen');
   screen.style.minHeight='810px';
-  applySurface(screen, config.profile.surfaces.background, config.profile.colors.page_bg);
+  applySurface(screen, config.profile.surfaces.background, config.profile.colors.background_bg || config.profile.colors.page_bg);
   screen.style.overflow='visible';
   renderHeader(screen);
   renderDescription(screen);
@@ -534,7 +538,10 @@ function renderDescriptionStage(){
   stage.appendChild(screen);
   const descEl=screen.querySelector('.description');
   if(!descEl) return;
-  const h=descEl.offsetHeight;
+  const styles=getComputedStyle(descEl);
+  const h=descEl.offsetHeight +
+          (parseFloat(styles.marginTop)||0) +
+          (parseFloat(styles.marginBottom)||0);
   screen.style.height=h+'px';
   fitStage(stage);
   const scale=stage.clientWidth/1440;
@@ -557,7 +564,7 @@ function renderBackgroundStage(){
   const stage = document.getElementById('stage-background');
   stage.innerHTML = '';
   const screen = createEl('div', 'screen');
-  applySurface(screen, config.profile.surfaces.background, config.profile.colors.page_bg);
+  applySurface(screen, config.profile.surfaces.background, config.profile.colors.background_bg || config.profile.colors.page_bg);
   stage.appendChild(screen);
   fitStage(stage);
 }
