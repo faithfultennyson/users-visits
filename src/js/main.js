@@ -10,6 +10,7 @@ import { setCards, setProfile } from './state.js';
 import { initializeScroll } from './ui-scroll.js';
 import { renderSocialButtons } from './ui-social.js';
 import { reduceMotion } from './a11y.js';
+import { adaptiveDeadline } from './offline-deadline.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // ---- loader DOM + freeze scroll -----------------------------------------
@@ -22,40 +23,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeHeader();
     initializeReports();
 
-    // fetch
-    const [profile, cards] = await Promise.all([
-      getPublicProfile(),
-      getPublicCards(),
-    ]);
-
-    // loader logo from profile assets if present
-    const logoUrl =
-      profile?.assets?.favicon?.svg ||
-      profile?.assets?.favicon?.png32 ||
-      profile?.assets?.favicon?.apple ||
-      profile?.assets?.favicon?.png16 ||
-      '';
+    const profile = await getPublicProfile();
+    // update loader accent/logo only if profile has favicon; DEFAULT_PROFILE has none, so this is a no-op
+    const logoUrl = profile?.assets?.favicon?.svg || profile?.assets?.favicon?.png32 || profile?.assets?.favicon?.apple || profile?.assets?.favicon?.png16 || '';
     if (logoUrl && loader.logo) loader.logo.src = logoUrl;
 
-    // state + head/meta
     setProfile(profile);
     applyHeadMeta(profile);
-
-    // theme + surfaces + card shape
     applyTheme(profile);
     applySurfaceVideos(profile);
     applyCardShape(profile);
 
-    // social CTA (only mounts if both integrations are present)
-    await renderSocialButtons();
+    await renderSocialButtons?.(); // optional if present
 
-    // grid + scroll + analytics
+    // Start 5s deadline AFTER first paint of shell
+    const deadline = adaptiveDeadline(5000, () => {
+      console.warn('cards_deadline_expired');
+      // keep skeletons; Phase 0 no redirect
+    });
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    deadline.start();
+
+    // Kick cards fetch
+    const cards = await getPublicCards();
     setCards(cards);
     initializeGrid(cards);
     initializeScroll();
     initializeAnalytics();
 
-    // keep loader for a minimum dwell so theme appears first
     await wait(700);
   } catch (err) {
     console.error('init error:', err);

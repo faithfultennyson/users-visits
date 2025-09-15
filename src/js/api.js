@@ -1,3 +1,19 @@
+import { DEFAULT_PROFILE } from './defaults.js';
+
+async function fetchWithTimeout(url, ms = 4000, opts = {}) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), ms);
+  try {
+    const r = await fetch(url, { ...opts, signal: ctrl.signal });
+    clearTimeout(id);
+    if (!r.ok) throw new Error(`fetch ${url} failed`);
+    return r;
+  } catch (e) {
+    clearTimeout(id);
+    throw e;
+  }
+}
+
 export async function getIntegrations() {
   try {
     const r = await fetch('/config/integrations.json', { cache: 'no-store' });
@@ -235,10 +251,12 @@ function generateMockCards(count = 200000) {
 
 // Mock API calls
 export async function getPublicProfile() {
-    console.log('Fetching public profile...');
-    const res = await fetch('/config/profile.json');
-    if (!res.ok) throw new Error('Failed to load profile');
-    return res.json();
+  try {
+    const res = await fetchWithTimeout('/config/profile.json', 4000);
+    return await res.json();
+  } catch {
+    return DEFAULT_PROFILE; // baked-in defaults, no profile image
+  }
 }
 
 export async function getLinksConfig() {
