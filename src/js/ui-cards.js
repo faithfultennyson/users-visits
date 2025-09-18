@@ -124,6 +124,7 @@ function createCardElement(card) {
 
   const cardEl = document.createElement('a');
   cardEl.className = 'card';
+  cardEl.setAttribute('data-card', '');
   cardEl.setAttribute('target', '_blank');
   cardEl.setAttribute('rel', 'noopener');
   cardEl.dataset.cardPublicHash = cardPublicHash;

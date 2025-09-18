@@ -1,7 +1,7 @@
 // Header functionality
 import { trackHeaderLinkClick } from './analytics.js';
 import { getLinksConfig } from './api.js';
-import { setLinksConfig } from './state.js';
+import { APP_STATE, setLinksConfig } from './state.js';
 import { initializeFooter } from './ui-footer.js';
 
 function createLink(link, basePath, withTitle = false) {
@@ -39,10 +39,24 @@ export function initializeHeader() {
     const overflowNav = hamburgerMenu?.querySelector('.menu-links');
     const quickNav = document.querySelector('.header-links');
 
-    // Load links config and render
-    getLinksConfig().then(config => {
+    // Use existing config if available, otherwise fetch
+    const useConfig = async () => {
+        if (APP_STATE.linksConfig) return APP_STATE.linksConfig;
+        const cfg = await getLinksConfig();
+        setLinksConfig(cfg);
+        return cfg;
+    };
+
+    useConfig().then(config => {
         setLinksConfig(config);
         const base = config.icons.base_path;
+        // Set profile logo from profile-image config
+        const logoEl = document.getElementById('logo');
+        const profileImg = config['profile-image'];
+        if (logoEl && profileImg?.base_path) {
+            const name = profileImg.logo || 'logo';
+            logoEl.src = `${profileImg.base_path}${name}.png`;
+        }
         if (quickNav) {
             quickNav.innerHTML = '';
             config.header.quick.slice(0, 3).forEach(link => {

@@ -10,56 +10,89 @@ import { setCards, setProfile } from './state.js';
 import { initializeScroll } from './ui-scroll.js';
 import { renderSocialButtons } from './ui-social.js';
 import { reduceMotion } from './a11y.js';
-import { adaptiveDeadline } from './offline-deadline.js';
+
+const HOME = 'https://creatorspase.com';
+
+function makeOfflineAwareTimer(ms, onExpire) {
+  let remain = ms, timer = 0, t0 = 0, wasOnline = navigator.onLine;
+  const clear = () => { if (timer) { clearTimeout(timer); timer = 0; } };
+  const start = () => {
+    if (!navigator.onLine || timer || remain <= 0) return;
+    t0 = performance.now();
+    timer = setTimeout(() => { timer = 0; onExpire(); }, remain);
+  };
+  const reset = () => { clear(); remain = ms; };
+  const pause = () => {
+    if (!timer) return;
+    const spent = performance.now() - t0;
+    clear(); remain = Math.max(0, remain - spent);
+  };
+  window.addEventListener('offline', () => { wasOnline = false; pause(); });
+  window.addEventListener('online',  () => { if (!wasOnline) { wasOnline = true; start(); } });
+  return { start, reset, pause, remaining: () => remain };
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // ---- loader DOM + freeze scroll -----------------------------------------
-  const unfreeze = freezeScroll();
-  const loader = mountLoader(); // returns {root, logo}
+  const body = document.body;
+  const loader = document.getElementById('loader');
+  const app = document.getElementById('app');
 
-  try {
-    // base UI (fonts, header shell, reports)
-    initializeTheme();
-    initializeHeader();
-    initializeReports();
+  initializeTheme();
+  initializeReports();
+  initializeAnalytics();
 
-    const profile = await getPublicProfile();
-    // update loader accent/logo only if profile has favicon; DEFAULT_PROFILE has none, so this is a no-op
-    const logoUrl = profile?.assets?.favicon?.svg || profile?.assets?.favicon?.png32 || profile?.assets?.favicon?.apple || profile?.assets?.favicon?.png16 || '';
-    if (logoUrl && loader.logo) loader.logo.src = logoUrl;
+  // Config deadline: 3s from now; pause on offline
+  const configDeadline = makeOfflineAwareTimer(3000, () => {
+    if (app.classList.contains('is-hidden')) window.location.replace(HOME);
+  });
+  configDeadline.start();
 
-    setProfile(profile);
-    applyHeadMeta(profile);
-    applyTheme(profile);
-    applySurfaceVideos(profile);
-    applyCardShape(profile);
+    try {
+      // Fetch both configs in parallel; block render until both resolve
+      const [profile, links] = await Promise.all([
+        getPublicProfile(),   // /config/profile.json (has theme + meta)
+        getLinksConfig()      // /config/links.json (has header/footer icons)
+      ]);
 
-    await renderSocialButtons?.(); // optional if present
+      setProfile(profile);          // also calls applyTheme in state.js
+      setLinksConfig(links);
 
-    // Start 5s deadline AFTER first paint of shell
-    const deadline = adaptiveDeadline(5000, () => {
-      console.warn('cards_deadline_expired');
-      // keep skeletons; Phase 0 no redirect
-    });
-    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-    deadline.start();
+      applyHeadMeta(profile);
+      applyCardShape(profile);
+      applySurfaceVideos(profile);
 
-    // Kick cards fetch
-    const cards = await getPublicCards();
-    setCards(cards);
-    initializeGrid(cards);
-    initializeScroll();
-    initializeAnalytics();
+      // Header/Footer depend on links; initialize after links are set
+      initializeHeader();
+      renderSocialButtons?.();
 
-    await wait(700);
-  } catch (err) {
-    console.error('init error:', err);
-    // fall through; we still clear loader + unfreeze so page is usable
-  } finally {
-    // remove loader + unfreeze scroll
-    loader.root?.remove();
-    unfreeze();
-  }
+      // Reveal app, hide loader, unlock scroll
+      app.classList.remove('is-hidden');
+      app.classList.add('is-ready');
+      loader?.classList.remove('visible');
+      body.classList.remove('loading');
+
+      // Cards deadline: 5s starting AFTER app is visible; pause on offline
+      const cardsDeadline = makeOfflineAwareTimer(5000, () => {
+        const grid = document.getElementById('grid');
+        const hasCards = grid && grid.querySelector('[data-card]');
+        if (!hasCards) window.location.replace(HOME);
+      });
+      requestAnimationFrame(() => requestAnimationFrame(() => cardsDeadline.start()));
+
+      // Fetch and render cards (existing logic)
+      try {
+        const cards = await getPublicCards();
+        setCards(cards);
+        initializeGrid(cards);
+        initializeScroll();
+      } catch (e) {
+        // Let cardsDeadline handle redirect after 5s if nothing renders
+        console.warn('cards fetch error', e);
+      }
+    } catch (e) {
+      // On config error: allow configDeadline to redirect after 3s (online-only)
+      console.error('config init error', e);
+    }
 });
 
 // ---------- helpers ----------------------------------------------------------

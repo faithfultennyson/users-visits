@@ -26,7 +26,7 @@ export function applyTheme(profile) {
   root.style.setProperty('--brand-text', profile.brand.text);
 
   // Base colors used across the sheet
-  root.style.setProperty('--creator-bg', profile.colors.background_bg || profile.colors.page_bg);
+  root.style.setProperty('--creator-bg', profile.colors.page_bg);
   root.style.setProperty('--creator-gradient', profile.colors.gradient);
   root.style.setProperty('--accent', profile.colors.accent);
   root.style.setProperty('--text', profile.colors.header_text);
@@ -156,7 +156,7 @@ export function applyTheme(profile) {
         desc.style.backdropFilter = `blur(${blur})`;
         desc.style.webkitBackdropFilter = `blur(${blur})`;
       } else {
-        desc.style.background = profile.colors.desc_bg || profile.colors.page_bg; // solid
+        desc.style.background = profile.colors.page_bg; // solid
       }
     }
 

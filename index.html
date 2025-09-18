@@ -42,10 +42,14 @@
 
 
 </head>
-<body>
+<body class="loading">
+    <div id="loader" class="loader visible" aria-busy="true" aria-live="polite">
+        <div class="spinner" role="status" aria-label="Loading"></div>
+        <p class="hint">Loading your space…</p>
+    </div>
 
-
-    <header class="header h1">
+    <div id="app" class="app is-hidden">
+        <header class="header h1">
 
         <div class="header-content">
             <div class="branding">
@@ -117,7 +121,13 @@
         <button type="button" data-reason="Copyright">Copyright</button>
     </div>
 
-    <button id="backToTop" aria-label="Back to top" class="back-to-top">↑</button>
+        <button id="backToTop" aria-label="Back to top" class="back-to-top">↑</button>
+    </div>
+
+    <noscript>
+        <div class="nojs">JavaScript is required to view this page.</div>
+    </noscript>
+
     <script type="module" src="/src/js/main.js"></script>
 </body>
 </html>
